@@ -1,0 +1,126 @@
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+.header-top-end {
+  position: absolute;
+  right: 0;
+  margin-right: 7vw;
+}
+#header__top {
+  position: absolute;
+  top: 0;
+  z-index: 5;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 50px;
+}
+
+#header__logo {
+  position: absolute;
+  left: calc(50% - 90px);
+  min-height: 75px;
+  padding-top: 10px;
+}
+
+#header__right {
+  position: absolute;
+  right: 1px;
+  margin-right: 6vw;
+  min-height: 75px;
+  padding-top: 25px;
+}
+
+#menu {
+  z-index: 2;
+  top: 7px;
+  margin-left: 6vw;
+  position: absolute;
+}
+
+.menu-bg {
+  top: 0;
+  position: absolute;
+}
+
+.menu-bg,
+#menu {
+  left: 0;
+}
+
+#menu-bar {
+  width: 25px;
+  cursor: pointer;
+}
+
+.bar {
+  height: 3px;
+  width: 100%;
+  background-color: #DC052D;
+  display: block;
+  border-radius: 5px;
+  transition: 0.3s ease;
+  margin-bottom: 4px;
+}
+
+.nav_ {
+  transition: 0.3s ease;
+  display: none;
+}
+
+.nav_ a {
+  color: white;
+  background: none;
+  border: none;
+}
+
+.nav_ a:hover {
+  font-weight: bold;
+}
+
+#nav .item {}
+
+#nav .item.header {
+  font-size: 3em;
+}
+
+
+.menu-bg {
+  z-index: 1;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, #DC052D, #DC052D);
+  transition: 0.3s ease;
+  border-radius: 0px 0px 50em 0px;
+}
+
+.change {
+  display: block;
+}
+
+.change .bar {
+  background-color: white;
+}
+
+.change #bar1 {
+  transform: translateY(4px) rotateZ(-45deg);
+}
+
+.change #bar2 {
+  opacity: 0;
+}
+
+.change #bar3 {
+  transform: translateY(-6px) rotateZ(45deg);
+}
+
+.change-bg {
+  width: 25em;
+  height: 100vh;
+}
+
+.menu-open {
+  overflow-y: hidden;
+}
