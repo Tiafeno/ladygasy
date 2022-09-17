@@ -5,3 +5,18 @@ export declare interface GroupAttribute {
   slug_name: string,
   is_color: number
 }
+
+export declare interface Product {
+  id_product: number,
+  name: string,
+  slug_name: string,
+  type: string,
+  ean13: string,
+  quantity: number,
+  minimal_quantity: number,
+  reference: string,
+  active: number,
+  price: number,
+  description: string,
+  description_short: string
+}

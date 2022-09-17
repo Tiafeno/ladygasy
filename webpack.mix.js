@@ -15,5 +15,5 @@ const {extract} = require("laravel-mix");
 mix.alias({ziggy: path.resolve('vendor/tightenco/ziggy/vue')});
 mix.ts('resources/js/app.ts', 'public/js')
     .vue({version: 3})
-  .extract(['ziggy-js', 'lodash'])
+    .extract(['ziggy-js', 'lodash'])
     .sass('resources/sass/app.scss', 'public/css');

@@ -6,6 +6,9 @@
 require('./bootstrap');
 require('./ladygasy');
 
+import '@vueup/vue-quill/dist/vue-quill.snow.prod.css';
+import 'vue-select/dist/vue-select.css';
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -26,13 +29,26 @@ require('./ladygasy');
 
 // 1. On importe createApp
 import { createApp } from "vue";
+import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router';
 
 // 2. On importe AppComponent.vue
 const CategoryComponent = require("./components/CategoryComponent.vue").default;
 const AttributeComponent = require('./components/AttributeComponent.vue').default;
+const ProductComponent = require('./components/ProductComponent.vue').default;
 
 // 3. On monte l'application Vue sur l'élément #app
+const ProductRoutes: Array<RouteRecordRaw> = [
+  { path: '/', component: require('./components/ProductList.vue').default },
+  { path: '/product/new', component: require('./components/ProductEditor.vue').default, name: 'new-product' },
+  { path: '/product/:id', component: require('./components/ProductEditor.vue').default, name: 'edit-product' }
+];
+const ProductRouter = createRouter({
+  history:createWebHashHistory(),
+  routes: ProductRoutes
+})
 
 createApp(CategoryComponent).mount("#app-category")
-createApp(AttributeComponent)
-  .mount("#app-attribute")
+createApp(AttributeComponent).mount("#app-attribute")
+createApp(ProductComponent)
+  .use(ProductRouter)
+  .mount('#app-admin-product');

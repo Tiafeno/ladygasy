@@ -27,10 +27,13 @@ class AdminAttributeController extends Controller
     return response($groups->toArray());
   }
 
+  public function group_attributes(Request $request, $id_group) {
+    // TODO
+  }
+
   public function attributes(Request $request)
   {
     $attrs = AttributeModel::all();
-
     return response($attrs->toArray());
   }
 
@@ -101,7 +104,6 @@ class AdminAttributeController extends Controller
           ->update(['id_attribute', 0]);
       });
     }
-
     return response(['success' => true]);
   }
 }

@@ -22,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::redirect('ld-admin/', 'ld-admin/dashboard');
 Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], function () {
-  Route::get('products', [ProductController::class, 'index_admin'])->name('index.admin.product');
-  Route::get('product/created', [ProductController::class, 'create_admin'])->name('created.admin.product');
+  Route::get('products', [AdminController::class, 'index_product_admin'])->name('index.admin.product');
+  Route::post('products', [AdminController::class, 'store_product_admin'])->name('store.admin.product');
+  Route::options('products', [AdminController::class, 'products_admin'])->name('admin.products');
+  Route::get('product/created', [AdminController::class, 'create_product_admin'])->name('created.admin.product');
 
   Route::get('categories', [CategoryController::class, 'index_admin'])->name('index.admin.categories');
   Route::delete('categories/{id}', [CategoryController::class, 'destroy_admin'])->name('destroy.admin.categories');
@@ -39,7 +41,9 @@ Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], fun
     Route::delete('/{id}', [AdminAttributeController::class, 'destroy_attribute'])->name('destroy.attribute');
   });
 
+  Route::group(['prefix' => 'group'],function() {
 
+  });
 
   Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
   Route::resource('customers', CustomerController::class);

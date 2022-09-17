@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-  use ProductManager;
 
   /**
    * Display a listing of the resource.
