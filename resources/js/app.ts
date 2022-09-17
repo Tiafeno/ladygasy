@@ -35,6 +35,7 @@ import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router';
 const CategoryComponent = require("./components/CategoryComponent.vue").default;
 const AttributeComponent = require('./components/AttributeComponent.vue').default;
 const ProductComponent = require('./components/ProductComponent.vue').default;
+const AttributeCombinationGroup = require('./components/AttributeCombinationGroup').default;
 
 // 3. On monte l'application Vue sur l'élément #app
 const ProductRoutes: Array<RouteRecordRaw> = [
@@ -51,4 +52,5 @@ createApp(CategoryComponent).mount("#app-category")
 createApp(AttributeComponent).mount("#app-attribute")
 createApp(ProductComponent)
   .use(ProductRouter)
+  .component("AttributeCombinationGroup", AttributeCombinationGroup)
   .mount('#app-admin-product');

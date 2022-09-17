@@ -15786,6 +15786,229 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts":
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var doHTTP_1 = __webpack_require__(/*! ../doHTTP */ "./resources/js/doHTTP.ts");
+
+exports["default"] = (0, vue_1.defineComponent)({
+  name: "AttributeCombinationGroup",
+  props: {
+    group: {
+      type: Object
+    }
+  },
+  emits: ['update-attr'],
+  setup: function setup(props, _a) {
+    var _this = this;
+
+    var emit = _a.emit;
+    var attributes = (0, vue_1.ref)([]);
+    var loading = (0, vue_1.ref)(false);
+    (0, vue_1.onMounted)(function () {
+      return __awaiter(_this, void 0, void 0, function () {
+        var arg, response;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              arg = {
+                url: route('options.group.attribute', {
+                  id_group: props.group.id_product_group
+                }),
+                method: 'options',
+                data: {}
+              };
+              loading.value = true;
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(arg)];
+
+            case 1:
+              response = _a.sent();
+              loading.value = false;
+
+              if (response.status == 200) {
+                attributes.value = response.data;
+              }
+
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    });
+
+    var updateInput = function updateInput(e, attr) {
+      if (e.target.checked) emit('update-attr', attr, 'ADD');
+      if (!e.target.checked) emit('update-attr', attr, 'REMOVE');
+    };
+
+    return {
+      loading: loading,
+      attributes: attributes,
+      updateInput: updateInput
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeTabComponent.vue?vue&type=script&lang=ts":
 /*!******************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeTabComponent.vue?vue&type=script&lang=ts ***!
@@ -16947,6 +17170,8 @@ var vSelect = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/d
 
 var doHTTP_1 = __webpack_require__(/*! ../doHTTP */ "./resources/js/doHTTP.ts");
 
+var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+
 exports["default"] = (0, vue_1.defineComponent)({
   name: "ProductEditor",
   components: {
@@ -16959,11 +17184,15 @@ exports["default"] = (0, vue_1.defineComponent)({
     var router = (0, vue_router_1.useRouter)();
     var editor = (0, vue_1.ref)('new'); // new for empty form or edit for edit product
 
-    var recap = (0, vue_1.ref)('');
+    var isSaved = (0, vue_1.ref)(false);
+    var dirtySaved = (0, vue_1.ref)(false);
+    var ID = (0, vue_1.ref)(0);
     var title = (0, vue_1.ref)('');
+    var recap = (0, vue_1.ref)('');
     var description = (0, vue_1.ref)('');
     var type = (0, vue_1.ref)('simple');
     var reference = (0, vue_1.ref)('');
+    var active = (0, vue_1.ref)(false);
     var price = (0, vue_1.ref)(0);
     var quantity = (0, vue_1.ref)(1);
     var categories = (0, vue_1.ref)([]); // Tous les categories disponible
@@ -16972,6 +17201,7 @@ exports["default"] = (0, vue_1.defineComponent)({
 
     var combinations = (0, vue_1.ref)([]); // Contient la liste de tous les combinations du produit
 
+    var combinationValues = (0, vue_1.ref)([]);
     var attributeGroups = (0, vue_1.ref)([]); // Tous les groups d'attibutes disponible
 
     (0, vue_1.onMounted)(function () {
@@ -17007,6 +17237,13 @@ exports["default"] = (0, vue_1.defineComponent)({
                 attributeGroups.value = allPromise[1].data;
               }
 
+              return [4
+              /*yield*/
+              , fetchCombination()];
+
+            case 2:
+              _a.sent();
+
               return [2
               /*return*/
               ];
@@ -17015,12 +17252,218 @@ exports["default"] = (0, vue_1.defineComponent)({
       });
     });
 
-    var fetchAttrs = function fetchAttrs(idGroup) {
+    var fetchCombination = function fetchCombination() {
       return __awaiter(_this, void 0, void 0, function () {
+        var config, response, data, e_1;
         return __generator(this, function (_a) {
-          return [2
-          /*return*/
-          ];
+          switch (_a.label) {
+            case 0:
+              if (!(ID.value && type.value === "combination")) return [3
+              /*break*/
+              , 4];
+              config = {
+                url: route('product.combination', {
+                  id_product: ID.value
+                }),
+                method: 'get'
+              };
+              _a.label = 1;
+
+            case 1:
+              _a.trys.push([1, 3,, 4]);
+
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(config)];
+
+            case 2:
+              response = _a.sent();
+              data = response.data;
+
+              if (response.status === 200) {
+                combinations.value = (0, lodash_1.cloneDeep)(data);
+              }
+
+              return [3
+              /*break*/
+              , 4];
+
+            case 3:
+              e_1 = _a.sent();
+              return [3
+              /*break*/
+              , 4];
+
+            case 4:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    };
+
+    var pushCombination = function pushCombination(attr, type) {
+      if (type === "ADD") {
+        combinationValues.value.push(attr);
+      } else {
+        combinationValues.value = combinationValues.value.filter(function (v) {
+          return v.id_attribute !== attr.id_attribute;
+        });
+      }
+    };
+
+    var submitProduct = function submitProduct() {
+      return __awaiter(_this, void 0, void 0, function () {
+        var arg, response, e_2;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              if ((0, lodash_1.isEmpty)(title.value)) {
+                dirtySaved.value = true;
+                return [2
+                /*return*/
+                ];
+              }
+
+              arg = {
+                url: route('store.admin.product'),
+                method: 'post',
+                data: {
+                  name: title.value,
+                  quantity: quantity.value,
+                  reference: reference.value,
+                  price: price.value,
+                  type: type.value,
+                  categories: category.value,
+                  description: description.value,
+                  description_short: recap.value,
+                  active: active.value
+                }
+              };
+              _a.label = 1;
+
+            case 1:
+              _a.trys.push([1, 3,, 4]);
+
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(arg)];
+
+            case 2:
+              response = _a.sent();
+
+              if (response.status === 200) {
+                isSaved.value = true;
+                ID.value = (0, lodash_1.cloneDeep)(response.data.id);
+              }
+
+              return [3
+              /*break*/
+              , 4];
+
+            case 3:
+              e_2 = _a.sent();
+              return [3
+              /*break*/
+              , 4];
+
+            case 4:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    }; // Crée une combinaison de produit
+
+
+    var submitCombination = function submitCombination() {
+      return __awaiter(_this, void 0, void 0, function () {
+        var attrIds, arg, response, e_3;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              dirtySaved.value = true;
+
+              if ((0, lodash_1.isEmpty)(title.value) || (0, lodash_1.isEmpty)(combinationValues.value)) {
+                return [2
+                /*return*/
+                ];
+              }
+
+              if (!!isSaved.value) return [3
+              /*break*/
+              , 2];
+              return [4
+              /*yield*/
+              , submitProduct()];
+
+            case 1:
+              _a.sent();
+
+              _a.label = 2;
+
+            case 2:
+              if (!ID.value) return [3
+              /*break*/
+              , 8];
+              attrIds = (0, lodash_1.map)(combinationValues.value, function (attr) {
+                return attr.id_attribute;
+              });
+              arg = {
+                url: route('post.product.combination', {
+                  id_product: ID.value
+                }),
+                method: 'post',
+                data: {
+                  reference: '',
+                  ean13: '',
+                  quantity: 0,
+                  price: 0,
+                  attributes: attrIds
+                }
+              };
+              _a.label = 3;
+
+            case 3:
+              _a.trys.push([3, 7,, 8]);
+
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(arg)];
+
+            case 4:
+              response = _a.sent();
+              if (!(response.status === 200)) return [3
+              /*break*/
+              , 6];
+              return [4
+              /*yield*/
+              , fetchCombination()];
+
+            case 5:
+              _a.sent();
+
+              _a.label = 6;
+
+            case 6:
+              return [3
+              /*break*/
+              , 8];
+
+            case 7:
+              e_3 = _a.sent();
+              console.log(e_3);
+              return [3
+              /*break*/
+              , 8];
+
+            case 8:
+              return [2
+              /*return*/
+              ];
+          }
         });
       });
     };
@@ -17029,14 +17472,20 @@ exports["default"] = (0, vue_1.defineComponent)({
       recap: recap,
       title: title,
       type: type,
+      pushCombination: pushCombination,
+      combinationValues: combinationValues,
       quantity: quantity,
       description: description,
       reference: reference,
       price: price,
       categories: categories,
+      active: active,
       category: category,
       combinations: combinations,
-      attributeGroups: attributeGroups
+      dirtySaved: dirtySaved,
+      attributeGroups: attributeGroups,
+      submitCombination: submitCombination,
+      submitProduct: submitProduct
     };
   }
 });
@@ -17266,6 +17715,59 @@ exports["default"] = (0, vue_1.defineComponent)({
     };
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.render = void 0;
+
+var vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "mt-2"
+};
+var _hoisted_2 = {
+  "class": "form-check"
+};
+var _hoisted_3 = ["onInput"];
+var _hoisted_4 = {
+  "class": "form-check-label"
+};
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", null, [(0, vue_1.createElementVNode)("h6", null, (0, vue_1.toDisplayString)(_ctx.group.name), 1
+  /* TEXT */
+  ), (0, vue_1.createElementVNode)("div", _hoisted_1, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributes, function (attr) {
+    return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", {
+      key: attr.id_attribute
+    }, [(0, vue_1.createElementVNode)("div", _hoisted_2, [(0, vue_1.createElementVNode)("input", {
+      type: "checkbox",
+      onInput: function onInput(e) {
+        _ctx.updateInput(e, attr);
+      },
+      "class": "form-check-input"
+    }, null, 40
+    /* PROPS, HYDRATE_EVENTS */
+    , _hoisted_3), (0, vue_1.createElementVNode)("label", _hoisted_4, (0, vue_1.toDisplayString)(attr.name), 1
+    /* TEXT */
+    )])]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))])]);
+}
+
+exports.render = render;
 
 /***/ }),
 
@@ -18029,7 +18531,7 @@ var _hoisted_20 = {
 
 var _hoisted_21 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
   "class": "mb-2"
-}, "Prix", -1
+}, "Reference", -1
 /* HOISTED */
 );
 
@@ -18039,18 +18541,85 @@ var _hoisted_22 = {
 
 var _hoisted_23 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
   "class": "mb-2"
+}, "Prix", -1
+/* HOISTED */
+);
+
+var _hoisted_24 = {
+  "class": "mb-3"
+};
+
+var _hoisted_25 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+  "class": "mb-2"
 }, "Categories", -1
 /* HOISTED */
 );
 
-var _hoisted_24 = /*#__PURE__*/(0, vue_1.createStaticVNode)("<div class=\"tab-pane\" id=\"des-b1\"><div><h6 class=\"font-13 mt-3\">Auto-sizing</h6><form><div class=\"row gy-2 gx-2 align-items-center\"><div class=\"col-auto\"><label class=\"visually-hidden\" for=\"inlineFormInput\">Name</label><input type=\"text\" class=\"form-control mb-2\" id=\"inlineFormInput\" placeholder=\"Jane Doe\"></div><div class=\"col-auto\"><label class=\"visually-hidden\" for=\"inlineFormInputGroup\">Username</label><div class=\"input-group mb-2\"><div class=\"input-group-text\">@</div><input type=\"text\" class=\"form-control\" id=\"inlineFormInputGroup\" placeholder=\"Username\"></div></div><div class=\"col-auto\"><div class=\"form-check mb-2\"><input type=\"checkbox\" class=\"form-check-input\" id=\"autoSizingCheck\"><label class=\"form-check-label\" for=\"autoSizingCheck\">Remember me</label></div></div><div class=\"col-auto\"><button type=\"submit\" class=\"btn btn-primary mb-2\">Submit</button></div></div></form></div></div>", 1);
+var _hoisted_26 = {
+  "class": "tab-pane",
+  id: "des-b1"
+};
+
+var _hoisted_27 = /*#__PURE__*/(0, vue_1.createElementVNode)("h6", {
+  "class": "font-13 mt-3"
+}, "Auto-sizing", -1
+/* HOISTED */
+);
+
+var _hoisted_28 = {
+  "class": "row"
+};
+
+var _hoisted_29 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
+  "class": "col-md-8"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_30 = {
+  "class": "col-md-4"
+};
+var _hoisted_31 = {
+  "class": "position-absolute"
+};
+var _hoisted_32 = {
+  "class": "form-check form-switch"
+};
+var _hoisted_33 = ["checked"];
+
+var _hoisted_34 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+  "class": "form-check-label",
+  "for": "customSwitch1"
+}, "Active", -1
+/* HOISTED */
+);
+
+var _hoisted_35 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
+  "class": "btn btn-success",
+  type: "submit"
+}, "Enregistrer", -1
+/* HOISTED */
+);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_QuillEditor = (0, vue_1.resolveComponent)("QuillEditor");
 
   var _component_v_select = (0, vue_1.resolveComponent)("v-select");
 
-  return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", null, [(0, vue_1.createElementVNode)("form", null, [(0, vue_1.createElementVNode)("div", _hoisted_1, [(0, vue_1.createElementVNode)("div", _hoisted_2, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  var _component_attribute_combination_group = (0, vue_1.resolveComponent)("attribute-combination-group");
+
+  return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", null, [(0, vue_1.createElementVNode)("form", {
+    onSubmit: _cache[10] || (_cache[10] = (0, vue_1.withModifiers)( //@ts-ignore
+    function () {
+      var args = [];
+
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+
+      return _ctx.submitProduct && _ctx.submitProduct.apply(_ctx, args);
+    }, ["prevent"]))
+  }, [(0, vue_1.createElementVNode)("div", _hoisted_1, [(0, vue_1.createElementVNode)("div", _hoisted_2, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     "class": "form-control",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return _ctx.title = $event;
@@ -18097,14 +18666,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512
   /* NEED_PATCH */
   ), [[vue_1.vModelRadio, _ctx.type]]), _hoisted_19])]), (0, vue_1.createElementVNode)("div", _hoisted_20, [_hoisted_21, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
-    type: "number",
+    type: "text",
     "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+      return _ctx.reference = $event;
+    }),
+    "class": "form-control"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue_1.vModelText, _ctx.reference]])])]), (0, vue_1.createElementVNode)("div", _hoisted_22, [_hoisted_23, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    type: "number",
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return _ctx.price = $event;
     }),
     "class": "form-control"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_22, [_hoisted_23, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
+  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_24, [_hoisted_25, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
     taggable: "",
     multiple: "",
     options: _ctx.categories,
@@ -18113,12 +18690,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return ctg.id_category;
     },
     modelValue: _ctx.category,
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
       return _ctx.category = $event;
     })
   }, null, 8
   /* PROPS */
-  , ["options", "reduce", "modelValue"])])])])])]), _hoisted_24])])])])]);
+  , ["options", "reduce", "modelValue"])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_26, [(0, vue_1.createElementVNode)("div", null, [_hoisted_27, (0, vue_1.createElementVNode)("div", _hoisted_28, [_hoisted_29, (0, vue_1.createElementVNode)("div", _hoisted_30, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
+    return (0, vue_1.openBlock)(), (0, vue_1.createBlock)(_component_attribute_combination_group, {
+      group: g,
+      onUpdateAttr: _ctx.pushCombination
+    }, null, 8
+    /* PROPS */
+    , ["group", "onUpdateAttr"]);
+  }), 256
+  /* UNKEYED_FRAGMENT */
+  )), (0, vue_1.createElementVNode)("button", {
+    "class": "btn btn-success",
+    onClick: _cache[8] || (_cache[8] = //@ts-ignore
+    function () {
+      var args = [];
+
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+
+      return _ctx.submitCombination && _ctx.submitCombination.apply(_ctx, args);
+    }),
+    type: "button"
+  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_31, [(0, vue_1.createElementVNode)("div", _hoisted_32, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    type: "checkbox",
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+      return _ctx.active = $event;
+    }),
+    checked: _ctx.active,
+    "class": "form-check-input",
+    id: "customSwitch1"
+  }, null, 8
+  /* PROPS */
+  , _hoisted_33), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_34]), _hoisted_35])], 32
+  /* HYDRATE_EVENTS */
+  )]);
 }
 
 exports.render = render;
@@ -18245,7 +18856,9 @@ var CategoryComponent = (__webpack_require__(/*! ./components/CategoryComponent.
 
 var AttributeComponent = (__webpack_require__(/*! ./components/AttributeComponent.vue */ "./resources/js/components/AttributeComponent.vue")["default"]);
 
-var ProductComponent = (__webpack_require__(/*! ./components/ProductComponent.vue */ "./resources/js/components/ProductComponent.vue")["default"]); // 3. On monte l'application Vue sur l'élément #app
+var ProductComponent = (__webpack_require__(/*! ./components/ProductComponent.vue */ "./resources/js/components/ProductComponent.vue")["default"]);
+
+var AttributeCombinationGroup = (__webpack_require__(/*! ./components/AttributeCombinationGroup */ "./resources/js/components/AttributeCombinationGroup.vue")["default"]); // 3. On monte l'application Vue sur l'élément #app
 
 
 var ProductRoutes = [{
@@ -18266,7 +18879,7 @@ var ProductRouter = (0, vue_router_1.createRouter)({
 });
 (0, vue_1.createApp)(CategoryComponent).mount("#app-category");
 (0, vue_1.createApp)(AttributeComponent).mount("#app-attribute");
-(0, vue_1.createApp)(ProductComponent).use(ProductRouter).mount('#app-admin-product');
+(0, vue_1.createApp)(ProductComponent).use(ProductRouter).component("AttributeCombinationGroup", AttributeCombinationGroup).mount('#app-admin-product');
 
 /***/ }),
 
@@ -38143,6 +38756,37 @@ exports["default"] = (sfc, props) => {
 
 /***/ }),
 
+/***/ "./resources/js/components/AttributeCombinationGroup.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/AttributeCombinationGroup.vue ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AttributeCombinationGroup_vue_vue_type_template_id_cef2b45e_ts_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true */ "./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true");
+/* harmony import */ var _AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AttributeCombinationGroup.vue?vue&type=script&lang=ts */ "./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts");
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+/* harmony import */ var C_Users_CRAAD_OI_Desktop_LadyGasy_lady_gasy_web_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,C_Users_CRAAD_OI_Desktop_LadyGasy_lady_gasy_web_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_AttributeCombinationGroup_vue_vue_type_template_id_cef2b45e_ts_true__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/AttributeCombinationGroup.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/components/AttributeComponent.vue":
 /*!********************************************************!*\
   !*** ./resources/js/components/AttributeComponent.vue ***!
@@ -38354,6 +38998,26 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport default from dynamic */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0___default.a)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/ts-loader/index.js??clonedRuleSet-6!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./AttributeCombinationGroup.vue?vue&type=script&lang=ts */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=script&lang=ts");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+ 
+
+/***/ }),
+
 /***/ "./resources/js/components/AttributeTabComponent.vue?vue&type=script&lang=ts":
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/AttributeTabComponent.vue?vue&type=script&lang=ts ***!
@@ -38451,6 +39115,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProductList_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ProductList_vue_vue_type_script_lang_ts__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
  
+
+/***/ }),
+
+/***/ "./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__esModule": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_template_id_cef2b45e_ts_true__WEBPACK_IMPORTED_MODULE_0__.__esModule),
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_template_id_cef2b45e_ts_true__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_AttributeCombinationGroup_vue_vue_type_template_id_cef2b45e_ts_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/ts-loader/index.js??clonedRuleSet-6!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/AttributeCombinationGroup.vue?vue&type=template&id=cef2b45e&ts=true");
+
 
 /***/ }),
 

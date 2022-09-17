@@ -20,3 +20,9 @@ export declare interface Product {
   description: string,
   description_short: string
 }
+
+export declare interface Attribute {
+  id_attribute: number,
+  id_group: number,
+  name: string
+}

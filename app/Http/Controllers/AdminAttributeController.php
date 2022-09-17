@@ -28,7 +28,9 @@ class AdminAttributeController extends Controller
   }
 
   public function group_attributes(Request $request, $id_group) {
-    // TODO
+    if (!$id_group || !is_numeric($id_group)) return response([]);
+    $attributes = AttributeModel::query()->where('id_group', '=', intval($id_group))->get();
+    return response($attributes->toArray());
   }
 
   public function attributes(Request $request)

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAttributeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CombinationController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,13 @@ Route::redirect('ld-admin/', 'ld-admin/dashboard');
 Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], function () {
   Route::get('products', [AdminController::class, 'index_product_admin'])->name('index.admin.product');
   Route::post('products', [AdminController::class, 'store_product_admin'])->name('store.admin.product');
+
+  // Combination
+  Route::get('product/{id_product}/combinations', [CombinationController::class, 'fetch'])->name('product.combination');
+  Route::put('combination/{id_combination}', [CombinationController::class, 'update_combination'])->name('update.combination');
+  Route::delete('combination/{id_combination}', [CombinationController::class, 'delete_combination'])->name('delete.combination');
+  Route::post('product/{id_product}/combination', [CombinationController::class, 'product_combination'])->name('post.product.combination');
+
   Route::options('products', [AdminController::class, 'products_admin'])->name('admin.products');
   Route::get('product/created', [AdminController::class, 'create_product_admin'])->name('created.admin.product');
 
@@ -42,7 +50,7 @@ Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], fun
   });
 
   Route::group(['prefix' => 'group'],function() {
-
+    Route::options('/{id_group}/attributes', [AdminAttributeController::class, 'group_attributes'])->name('options.group.attribute');
   });
 
   Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
