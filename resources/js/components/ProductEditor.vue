@@ -159,7 +159,7 @@ import {defineComponent, onMounted, ref} from 'vue';
 import {QuillEditor} from "@vueup/vue-quill";
 import {useRoute} from 'vue-router';
 import * as vSelect from 'vue-select';
-import {AxiosRequestConfig} from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import {doHTTP} from "../doHTTP";
 import {Attribute, GroupAttribute, Product} from "../types";
 import {cloneDeep, isEmpty, isString, map} from "lodash";
@@ -233,7 +233,7 @@ export default defineComponent({
       }
       await fetchCombination();
     });
-    const loadFile = (event) => {
+    const loadFile = async (event) => {
       const reader = new FileReader();
       reader.onload = function(){
         const output: any = document.getElementById('data-dz-thumbnail');
@@ -243,6 +243,20 @@ export default defineComponent({
       };
       file.value = event.target.files[0];
       reader.readAsDataURL(event.target.files[0]);
+
+      if (ID.value) {
+        const formData = new FormData();
+        formData.append('file', file.value);
+        const args: AxiosRequestConfig = {
+          url: route('update.image.product', {id_product: ID.value}),
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          method: "post",
+          data: formData
+        };
+        const uploadResponse = await doHTTP(args);
+      }
     }
 
     const triggerUploadInput = () => {
@@ -355,7 +369,10 @@ export default defineComponent({
             error = true;
         }
       }
-      if (!error) await updateCombination();
+      if (!error) {
+        // Update image
+        await updateCombination();
+      }
     }
 
     const updateCombination = async() => {

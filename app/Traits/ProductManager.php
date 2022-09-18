@@ -100,12 +100,12 @@ trait ProductManager
 
 	public function update_image_product(Request $request, $id_product) {
 		$validator = Validator::make($request->all(), [
-				"image" => ['required']
+				"file" => ['required']
 		]);
 		if ($validator->fails()) {
 			return response(['message' => $validator->getMessageBag()->first()], 401);
 		}
-		$uploadedFile = $request->file('image');
+		$uploadedFile = $request->file('file');
 		$folder = "public/product";
 		//$filename = time().$uploadedFile->getClientOriginalName();
 		$disk = Storage::disk("local");

@@ -17290,17 +17290,52 @@ exports["default"] = (0, vue_1.defineComponent)({
     });
 
     var loadFile = function loadFile(event) {
-      var reader = new FileReader();
+      return __awaiter(_this, void 0, void 0, function () {
+        var reader, formData, args, uploadResponse;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              reader = new FileReader();
 
-      reader.onload = function () {
-        var output = document.getElementById('data-dz-thumbnail');
-        var el = document.getElementById('uploadPreviewTemplate');
-        el.classList.remove('d-none');
-        output.src = reader.result;
-      };
+              reader.onload = function () {
+                var output = document.getElementById('data-dz-thumbnail');
+                var el = document.getElementById('uploadPreviewTemplate');
+                el.classList.remove('d-none');
+                output.src = reader.result;
+              };
 
-      file.value = event.target.files[0];
-      reader.readAsDataURL(event.target.files[0]);
+              file.value = event.target.files[0];
+              reader.readAsDataURL(event.target.files[0]);
+              if (!ID.value) return [3
+              /*break*/
+              , 2];
+              formData = new FormData();
+              formData.append('file', file.value);
+              args = {
+                url: route('update.image.product', {
+                  id_product: ID.value
+                }),
+                headers: {
+                  "Content-Type": "multipart/form-data"
+                },
+                method: "post",
+                data: formData
+              };
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(args)];
+
+            case 1:
+              uploadResponse = _a.sent();
+              _a.label = 2;
+
+            case 2:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
     };
 
     var triggerUploadInput = function triggerUploadInput() {
@@ -17530,12 +17565,14 @@ exports["default"] = (0, vue_1.defineComponent)({
             case 9:
               if (!!error) return [3
               /*break*/
-              , 11];
+              , 11]; // Update image
+
               return [4
               /*yield*/
               , updateCombination()];
 
             case 10:
+              // Update image
               _a.sent();
 
               _a.label = 11;
