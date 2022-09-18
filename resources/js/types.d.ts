@@ -6,6 +6,15 @@ export declare interface GroupAttribute {
   is_color: number
 }
 
+export declare interface Category {
+  id_category: number,
+  id_parent: number,
+  active: number,
+  name: string,
+  slug_name: string,
+  description: string
+}
+
 export declare interface Product {
   id_product: number,
   name: string,
@@ -13,6 +22,7 @@ export declare interface Product {
   type: string,
   ean13: string,
   quantity: number,
+  categories: Category[],
   minimal_quantity: number,
   reference: string,
   active: number,

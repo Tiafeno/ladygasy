@@ -28,6 +28,9 @@ Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], fun
 
   // Combination
   Route::get('product/{id_product}/combinations', [CombinationController::class, 'fetch'])->name('product.combination');
+  Route::get('product/{id_product}', [AdminController::class, 'fetch'])->name('product');
+  Route::put('product/{id_product}', [AdminController::class, 'update_product'])->name('update.product');
+  Route::put('product/{id_product}/image', [AdminController::class, 'update_image_product'])->name('update.image.product');
   Route::put('combination/{id_combination}', [CombinationController::class, 'update_combination'])->name('update.combination');
   Route::delete('combination/{id_combination}', [CombinationController::class, 'delete_combination'])->name('delete.combination');
   Route::post('product/{id_product}/combination', [CombinationController::class, 'product_combination'])->name('post.product.combination');

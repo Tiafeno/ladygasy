@@ -11,20 +11,21 @@ use Illuminate\Support\Facades\Validator;
 
 class CombinationController extends Controller
 {
-	public function fetch(Request $request, $id_product) {
+	public function fetch(Request $request, $id_product)
+	{
 		$product_attributes = DB::table('product_attribute')
 				->where('id_product', '=', intval($id_product))
 				->get();
-		$data = $product_attributes->map(function($pAttr) {
-				return [
-						'id' => (int)$pAttr['id_product_attribute'],
-						'name' => $pAttr['name'] ?? '',
-						'reference' => $pAttr['reference'] ?? '',
-						'ean13' => $pAttr['ean13'] ?? '',
-						'quantity' =>  (int)$pAttr['quantity'] ?? 0,
-						'price' => $pAttr['price'] ?? 0,
-					'default_on' => boolval($pAttr['default_on'] ?? 0)
-				];
+		$data = $product_attributes->map(function ($pAttr) {
+			return [
+					'id' => (int)$pAttr->id_product_attribute,
+					'name' => $pAttr->name ?? '',
+					'reference' => $pAttr->reference ?? '',
+					'ean13' => $pAttr->ean13 ?? '',
+					'quantity' => (int)$pAttr->quantity ?? 0,
+					'price' => $pAttr->price ?? 0,
+					'default_on' => boolval($pAttr->default_on ?? 0)
+			];
 		});
 
 		return response($data->toArray());
@@ -55,10 +56,10 @@ class CombinationController extends Controller
 							$group = Db::table('product_group')
 									->where('id_product_group', '=', $attr->id_group)
 									->first(['name']);
-							$name .= $group->name." - ".$attr->name;
+							$name .= $group->name . " - " . $attr->name;
 						}
 					}
-					$id_product_attribute = DB::table('product_attribute')->insertGetId([
+					$id_product_attribute = Db::table('product_attribute')->insertGetId([
 							'id_product' => intval($id_product),
 							'name' => $name,
 							'reference' => $request->get('reference'),
@@ -70,7 +71,7 @@ class CombinationController extends Controller
 						foreach ($attribute_ids as $attr_id) {
 							$attr = AttributeModel::query()->find(intval($attr_id), ['id_group']);
 							if ($attr) {
-								DB::table('combinations')->insert([
+								Db::table('combinations')->insert([
 										'id_product_attribute' => $id_product_attribute,
 										'id_attribute' => intval($attr_id),
 										'id_product_group' => $attr->id_group
@@ -94,7 +95,28 @@ class CombinationController extends Controller
 
 	public function update_combination(Request $request, $id_combination)
 	{
-
+		$combination = DB::table('combinations')
+				->where('id_combination', '=', intval($id_combination))
+				->first();
+		if ($combination) {
+			$product_attribute = DB::table('product_attribute')
+					->where('id_product_attribute', '=', $combination->id_product_attribute)
+					->first();
+			if ($product_attribute) {
+				$is_default = $request->get('default_on', 0);
+				$product_attribute->update([
+						'price' => (float)$request->get('price', 0),
+						'quantity' => intval($request->get('quantity', 0)),
+						'reference' => $request->get('reference', ''),
+						'default_on' => intval($is_default),
+				]);
+				return response(['message' => "mise à jour effectuer avec succès"]);
+			} else {
+				return response(['message' => "La déclinaison du produit est introuvable"], 401);
+			}
+		} else {
+			return response(['message' => "La combinaison est inntrouvable"], 401);
+		}
 	}
 
 	public function delete_combination(Request $request, $id_combination)
