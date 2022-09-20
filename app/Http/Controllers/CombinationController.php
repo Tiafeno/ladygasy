@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AttributeModel;
 use App\Models\ProductModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -99,21 +100,16 @@ class CombinationController extends Controller
 				->where('id_combination', '=', intval($id_combination))
 				->first();
 		if ($combination) {
-			$product_attribute = DB::table('product_attribute')
-					->where('id_product_attribute', '=', $combination->id_product_attribute)
-					->first();
-			if ($product_attribute) {
-				$is_default = $request->get('default_on', 0);
-				$product_attribute->update([
-						'price' => (float)$request->get('price', 0),
-						'quantity' => intval($request->get('quantity', 0)),
-						'reference' => $request->get('reference', ''),
-						'default_on' => intval($is_default),
-				]);
-				return response(['message' => "mise à jour effectuer avec succès"]);
-			} else {
-				return response(['message' => "La déclinaison du produit est introuvable"], 401);
-			}
+			$is_default = $request->get('default_on', 0);
+			DB::table('product_attribute')
+					->where('id_product_attribute', $combination->id_product_attribute)
+					->update([
+					'price' => (float)$request->get('price', 0),
+					'quantity' => intval($request->get('quantity', 0)),
+					'reference' => $request->get('reference', ''),
+					'default_on' => intval($is_default),
+			]);
+			return response(['message' => "mise à jour effectuer avec succès"]);
 		} else {
 			return response(['message' => "La combinaison est inntrouvable"], 401);
 		}

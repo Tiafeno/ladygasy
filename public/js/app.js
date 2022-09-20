@@ -18867,32 +18867,38 @@ var _hoisted_39 = {
 var _hoisted_40 = {
   "class": "table table-hover table-centered mb-0"
 };
-var _hoisted_41 = ["onUpdate:modelValue"];
-var _hoisted_42 = ["onUpdate:modelValue"];
 
-var _hoisted_43 = /*#__PURE__*/(0, vue_1.createElementVNode)("td", null, null, -1
+var _hoisted_41 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Prix", -1
 /* HOISTED */
 );
 
-var _hoisted_44 = {
+var _hoisted_42 = ["onUpdate:modelValue"];
+
+var _hoisted_43 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Quantité", -1
+/* HOISTED */
+);
+
+var _hoisted_44 = ["onUpdate:modelValue"];
+var _hoisted_45 = ["onUpdate:modelValue", "checked"];
+var _hoisted_46 = {
   "class": "col-md-4"
 };
-var _hoisted_45 = {
+var _hoisted_47 = {
   "class": "position-absolute"
 };
-var _hoisted_46 = {
+var _hoisted_48 = {
   "class": "form-check form-switch"
 };
-var _hoisted_47 = ["checked"];
+var _hoisted_49 = ["checked"];
 
-var _hoisted_48 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+var _hoisted_50 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
   "class": "form-check-label",
   "for": "customSwitch1"
 }, "Active", -1
 /* HOISTED */
 );
 
-var _hoisted_49 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
+var _hoisted_51 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
   "class": "btn btn-success",
   type: "submit"
 }, "Enregistrer", -1
@@ -19042,7 +19048,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.reference), 1
     /* TEXT */
-    ), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    ), (0, vue_1.createElementVNode)("td", null, [_hoisted_41, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].price = $event;
@@ -19050,7 +19056,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_41), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    , _hoisted_42), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_43, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].quantity = $event;
@@ -19058,10 +19064,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_42), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), _hoisted_43]);
+    , _hoisted_44), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+      type: "checkbox",
+      "onUpdate:modelValue": function onUpdateModelValue($event) {
+        return _ctx.combinations[index].default_on = $event;
+      },
+      checked: _ctx.combinations[index].default_on,
+      name: "default",
+      "class": "form-check-input"
+    }, null, 8
+    /* PROPS */
+    , _hoisted_45), [[vue_1.vModelCheckbox, _ctx.combinations[index].default_on]])])]);
   }), 256
   /* UNKEYED_FRAGMENT */
-  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_44, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
+  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_46, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
     return (0, vue_1.openBlock)(), (0, vue_1.createBlock)(_component_attribute_combination_group, {
       group: g,
       onUpdateAttr: _ctx.pushCombination
@@ -19083,7 +19099,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _ctx.generateCombination && _ctx.generateCombination.apply(_ctx, args);
     }),
     type: "button"
-  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_45, [(0, vue_1.createElementVNode)("div", _hoisted_46, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_47, [(0, vue_1.createElementVNode)("div", _hoisted_48, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "checkbox",
     "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
       return _ctx.active = $event;
@@ -19093,7 +19109,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "customSwitch1"
   }, null, 8
   /* PROPS */
-  , _hoisted_47), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_48]), _hoisted_49])], 32
+  , _hoisted_49), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_50]), _hoisted_51])], 32
   /* HYDRATE_EVENTS */
   )]);
 }

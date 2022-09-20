@@ -122,9 +122,17 @@
                       <tr v-for="(combination, index) in combinations">
                         <td>{{combination.name}}</td>
                         <td>{{combination.reference}}</td>
-                        <td><input type="number" v-model="combinations[index].price" class="form-control" ></td>
-                        <td><input type="number" v-model="combinations[index].quantity" class="form-control" ></td>
-                        <td></td>
+                        <td>
+                          <label>Prix</label>
+                          <input type="number" v-model="combinations[index].price" class="form-control" >
+                        </td>
+                        <td>
+                          <label>Quantité</label>
+                          <input type="number" v-model="combinations[index].quantity" class="form-control" >
+                        </td>
+                        <td>
+                          <input type="checkbox" v-model="combinations[index].default_on" :checked="combinations[index].default_on" name="default"  class="form-check-input" >
+                        </td>
                       </tr>
                       </tbody>
                     </table>
