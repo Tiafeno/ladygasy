@@ -19,6 +19,8 @@ export declare interface Product {
   id_product: number,
   name: string,
   slug_name: string,
+  image: string,
+  image_url: string,
   type: string,
   ean13: string,
   quantity: number,

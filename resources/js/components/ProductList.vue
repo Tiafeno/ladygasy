@@ -30,12 +30,16 @@
         <tbody>
           <tr v-for="product in products">
             <td>{{product.id_product}}</td>
-            <td></td>
+            <td><img :src="product.image_url" class="rounded me-3" height="35"> </td>
             <td>{{product.name}}</td>
-            <td></td>
-            <td>{{product.price}}</td>
+            <td><span v-for="cat in product.categories" :key="cat.id_category" class="badge badge-warning-lighten">{{cat.name}}</span></td>
+            <td>{{product.price ?? 0}} MGA</td>
             <td>{{product.quantity}}</td>
-            <td><span class="badge bg-success">{{product.active}}</span></td>
+            <td>
+              <span class="badge" :class="{'bg-danger': !product.active, 'bg-success': product.active}">
+                {{product.active ? "Actif" : "Désactiver"}}
+              </span>
+            </td>
             <td class="table-action">
               <router-link :to="{name: 'edit-product', params: {id: product.id_product}}"  class="action-icon">
                 <i class="mdi mdi-square-edit-outline"></i>
@@ -65,6 +69,9 @@ export default defineComponent({
       const config: AxiosRequestConfig = {
         url: route('admin.products'),
         method: 'options',
+        data: {
+          image: 'cart'
+        }
       }
       try {
         const response = await doHTTP(config);

@@ -32,6 +32,17 @@
             <div class="tab-pane show active" id="es-b1">
               <div class="row">
                 <div class="col-md-8">
+
+                  <div class="mb-3">
+                    <div class="text-title mb-2">Récapitulatif</div>
+                    <QuillEditor ref="quillRecap" v-model:content="recap" content-type="html" theme="snow" />
+                  </div>
+                  <div class="mb-3">
+                    <div class="text-title mb-2">Description</div>
+                    <QuillEditor ref="quillDesc" v-model:content="description" content-type="html" theme="snow" />
+                  </div>
+                </div>
+                <div class="col-md-4">
                   <div class="mb-3">
                     <form action="/target" class="dropzone" id="my-great-dropzone" @click="triggerUploadInput">
                       <div class="dz-message needsclick">
@@ -44,20 +55,20 @@
                       </div>
                     </form>
 
-                    <div class="d-none" id="uploadPreviewTemplate">
+                    <div v-if="image" id="uploadPreviewTemplate">
                       <div class="card mt-1 mb-0 shadow-none border">
                         <div class="p-2">
                           <div class="row align-items-center">
                             <div class="col-auto">
-                              <img id="data-dz-thumbnail" src="#" class="avatar-sm rounded bg-light" alt="">
+                              <a target="_blank" :href="imageUrl">
+                                <img id="data-dz-thumbnail" :src="imageUrl" class="avatar-sm rounded bg-light" alt="">
+                              </a>
                             </div>
                             <div class="col ps-0">
-                              <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                              <p class="mb-0" data-dz-size></p>
                             </div>
                             <div class="col-auto">
                               <!-- Button -->
-                              <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
+                              <a @click.prevent="removeImage" class="btn btn-link btn-lg text-muted" data-dz-remove>
                                 <i class="dripicons-cross"></i>
                               </a>
                             </div>
@@ -66,18 +77,6 @@
                       </div>
                     </div>
                   </div>
-
-
-                  <div class="mb-3">
-                    <div class="text-title mb-2">Récapitulatif</div>
-                    <QuillEditor ref="quillRecap" v-model:content="recap" content-type="html" theme="snow" />
-                  </div>
-                  <div class="mb-3">
-                    <div class="text-title mb-2">Description</div>
-                    <QuillEditor ref="quillDesc" v-model:content="description" content-type="html" theme="snow" />
-                  </div>
-                </div>
-                <div class="col-md-4">
                   <div class="mb-3">
                     <h5 class="mb-2">Combinations</h5>
                     <div class="form-check">
@@ -114,14 +113,14 @@
             </div>
             <div class="tab-pane" id="des-b1">
               <div>
-                <h6 class="font-13 mt-3">Auto-sizing</h6>
                 <div class="row">
                   <div class="col-md-8">
                     <table class="table table-hover table-centered mb-0">
                       <tbody>
                       <tr v-for="(combination, index) in combinations">
+                        <td>{{combination.id}}</td>
                         <td>{{combination.name}}</td>
-                        <td>{{combination.reference}}</td>
+
                         <td>
                           <label>Prix</label>
                           <input type="number" v-model="combinations[index].price" class="form-control" >
@@ -131,7 +130,19 @@
                           <input type="number" v-model="combinations[index].quantity" class="form-control" >
                         </td>
                         <td>
-                          <input type="checkbox" v-model="combinations[index].default_on" :checked="combinations[index].default_on" name="default"  class="form-check-input" >
+                          <label>Reference</label>
+                          <input type="text" v-model="combination.reference" class="form-control" >
+                        </td>
+                        <td>
+                          <input type="radio"
+                                 v-model="combination_default_on"
+                                 :value="combination.id"
+                                 :checked="combination_default_on === combination.id"
+                                 name="default"
+                                 class="form-check-input" >
+                        </td>
+                        <td>
+                          <span class="action-icon" @click="deleteCombination(combination.id)"><i class="mdi mdi-trash-can"></i></span>
                         </td>
                       </tr>
                       </tbody>
@@ -167,10 +178,11 @@ import {defineComponent, onMounted, ref} from 'vue';
 import {QuillEditor} from "@vueup/vue-quill";
 import {useRoute} from 'vue-router';
 import * as vSelect from 'vue-select';
-import axios, {AxiosRequestConfig} from "axios";
+import {AxiosRequestConfig} from "axios";
 import {doHTTP} from "../doHTTP";
 import {Attribute, GroupAttribute, Product} from "../types";
-import {cloneDeep, isEmpty, isString, map} from "lodash";
+import {cloneDeep, filter, find, isEmpty, isString, map} from "lodash";
+import {Confirm, Loading, Notify} from 'notiflix';
 
 declare const route: any;
 
@@ -202,6 +214,9 @@ export default defineComponent({
     const reference = ref('');
     const active = ref<boolean>(false);
     const price = ref(0);
+    const image = ref('');
+    const imageUrl = ref('');
+    const combination_default_on =ref(0);
     const quantity = ref(1);
     const categories = ref([]); // Tous les categories disponible
     const category = ref([]); // Categorie du produit
@@ -215,7 +230,6 @@ export default defineComponent({
         ID.value = parseInt(id, 10);
         isSaved.value = true;
       }
-
       const catArg: AxiosRequestConfig = {
         url: route('retrieve.admin.categories'),
         method: 'options',
@@ -241,36 +255,78 @@ export default defineComponent({
       }
       await fetchCombination();
     });
-    const loadFile = async (event) => {
-      const reader = new FileReader();
-      reader.onload = function(){
-        const output: any = document.getElementById('data-dz-thumbnail');
-        const el = document.getElementById('uploadPreviewTemplate');
-        el.classList.remove('d-none');
-        output.src = reader.result;
-      };
-      file.value = event.target.files[0];
-      reader.readAsDataURL(event.target.files[0]);
-
-      if (ID.value) {
-        const formData = new FormData();
-        formData.append('file', file.value);
-        const args: AxiosRequestConfig = {
-          url: route('update.image.product', {id_product: ID.value}),
-          headers: {
-            "Content-Type": "multipart/form-data",
+    const removeImage = async () => {
+      Confirm.show(
+          'Confirmation',
+          'Voulez vous vraiment supprimer l\'image?',
+          'Oui',
+          'Non',
+          async () => {
+            Loading.standard("Loading...", {
+              clickToClose: false
+            });
+            const argConf: AxiosRequestConfig = {
+              url: route('remove.image.product', {id_product: ID.value}),
+              method: "DELETE"
+            };
+            const response = await doHTTP(argConf);
+            Loading.remove();
+            if (response.status == 200) {
+              await populateForm();
+            }
           },
-          method: "post",
-          data: formData
-        };
-        const uploadResponse = await doHTTP(args);
-      }
-    }
+          async () => {
 
+          },
+          {
+          },
+      );
+    }
+    const loadFile = async (event) => {
+      Confirm.show(
+          'Confirmation',
+          'Voulez vous remplacé l\'ancienne image par celui-ci ?',
+          'Oui',
+          'Non',
+          async () => {
+            file.value = event.target.files[0];
+            if (ID.value) {
+              const formData = new FormData();
+              formData.append('file', file.value);
+              Loading.standard("Loading...", {
+                clickToClose: false
+              });
+              try {
+                const args: AxiosRequestConfig = {
+                  url: route('update.image.product', {id_product: ID.value}),
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  method: "post",
+                  data: formData
+                };
+                const uploadResponse = await doHTTP(args);
+                if (uploadResponse.status == 200) {
+                  await populateForm();
+                }
+              } catch (e) {
+                Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
+              }
+              Loading.remove();
+            } else {
+              Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
+            }
+          },
+          () => {
+
+          },
+          {
+          },
+      );
+    }
     const triggerUploadInput = () => {
       document.getElementById('product-image').click();
     }
-
     const fetchCombination = async () => {
       if (ID.value && type.value === "combination") {
         // Fetch all combination
@@ -283,11 +339,14 @@ export default defineComponent({
           const data = response.data;
           if (response.status === 200) {
             combinations.value = cloneDeep(data);
+            const default_combination = find(combinations.value, (v) => v.default_on);
+            if (default_combination) {
+              combination_default_on.value = default_combination.id;
+            }
           }
         } catch (e) {}
       }
     };
-
     const pushCombination = (attr: Attribute, type: string) => {
       if (type === "ADD") {
         combinationValues.value.push(attr);
@@ -297,9 +356,11 @@ export default defineComponent({
         });
       }
     };
-
     const populateForm = async() => {
       if (ID.value) {
+        Loading.standard("Chargement...", {
+          clickToClose: false
+        });
         const conf: AxiosRequestConfig = {
           url: route('product', {id_product: ID.value}),
           method: 'get'
@@ -316,10 +377,13 @@ export default defineComponent({
           reference.value = data.reference;
           active.value = Boolean(data.active);
           category.value = map(data.categories, cat => cat.id_category);
+          // show image
+          imageUrl.value = data.image_url ?? '';
+          image.value = data.image ?? '';
         }
+        Loading.remove();
       }
     };
-
     const submitProduct = async () => {
       let error = false;
       if (isEmpty(title.value)) {
@@ -382,11 +446,14 @@ export default defineComponent({
         await updateCombination();
       }
     }
-
     const updateCombination = async() => {
       if (ID.value && !isEmpty(combinations.value)) {
         const promiseCall = [];
+        Loading.standard("Chargement...", {
+          clickToClose: false
+        });
         for (let combination of combinations.value) {
+          combination.default_on = combination_default_on.value === combination.id;
           let arg: AxiosRequestConfig = {
             url: route('update.combination', {id_combination: combination.id}),
             method: 'put',
@@ -395,11 +462,38 @@ export default defineComponent({
           promiseCall.push(doHTTP(arg));
         }
         const responseAll = await Promise.all(promiseCall);
-
+        Loading.remove();
       }
     }
-
-    // Crée une combinaison de produit
+    const deleteCombination = async (idCombination: number) => {
+      // Vérifier si la combination est par default
+      if (combination_default_on.value === idCombination) {
+        combination_default_on.value = 0;
+      }
+      Confirm.show(
+          'Confirmation',
+          'Voulez vous vraiment supprimer l\'attribut?',
+          'Oui',
+          'Non',
+          async () => {
+            Loading.standard("Loading...", {
+              clickToClose: false
+            });
+            const configDelete: AxiosRequestConfig = {
+              url: route('delete.combination', {id_combination: idCombination}),
+              method: "DELETE",
+            };
+            const response = await doHTTP(configDelete);
+            Loading.remove();
+            if (response.status == 200) {
+              await fetchCombination();
+            }
+          },
+          async () => {},
+          {
+          },
+      );
+    }
     const generateCombination = async () => {
       dirtySaved.value = true;
       if (isEmpty(title.value) || isEmpty(combinationValues.value)) {
@@ -410,6 +504,7 @@ export default defineComponent({
       }
       if (ID.value) {
         const attrIds: Array<number> = map(combinationValues.value, (attr) => attr.id_attribute);
+        Loading.standard('Création en cours ...');
         const arg: AxiosRequestConfig = {
           url: route('post.product.combination', {id_product: ID.value}),
           method: 'post',
@@ -426,8 +521,10 @@ export default defineComponent({
           if (response.status === 200) {
             await fetchCombination();
           }
+          Loading.remove();
         } catch (e) {
-          console.log(e);
+          Loading.remove();
+          Notify.failure(e);
         }
       }
     };
@@ -435,7 +532,6 @@ export default defineComponent({
       recap,
       title,
       type,
-      pushCombination,
       combinationValues,
       quantity,
       description,
@@ -450,9 +546,15 @@ export default defineComponent({
       quillRecap,
       quillDesc,
       file,
+      image,
+      imageUrl,
+      combination_default_on,
+      pushCombination,
       loadFile,
       triggerUploadInput,
       generateCombination,
+      removeImage,
+      deleteCombination,
       submitProduct
     }
   }

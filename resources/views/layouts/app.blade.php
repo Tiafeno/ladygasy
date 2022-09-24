@@ -28,7 +28,13 @@
             <div id="header__top">
                 <x-menu-primary></x-menu-primary>
             </div>
-            <div id="header__slider"></div>
+            <div id="header__slider">
+                <div class="slide_title text-center" style="padding-top: 25vh">
+                    <h1 class=" header">ANTICELLULITE COMPLEX</h1>
+                    <h4>Try our perfect anti-cellulite complex with a hot body wrap for soft and healthy skin !</h4>
+                </div>
+
+            </div>
             <main class="py-4">
                 @yield('content')
             </main>

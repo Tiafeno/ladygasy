@@ -117,6 +117,24 @@ class CombinationController extends Controller
 
 	public function delete_combination(Request $request, $id_combination)
 	{
-
+		$combination = DB::table('combinations')
+				->where('id_combination', '=', intval($id_combination))
+				->first();
+		if ($combination) {
+			DB::table('product_attribute')
+					->where('id_product_attribute', '=', $combination->id_product_attribute)
+					->delete();
+			// Supprimer les paniers
+			DB::table("cart_has_product")
+					->where('id_product_attribute', '=', $combination->id_product_attribute)
+					->delete();
+			// Remove group and attribute join
+			DB::table("product_group_has_attribute")
+					->where('id_product_attribute', '=', $combination->id_product_attribute)
+					->delete();
+			DB::table('combinations')->where('id_combination', '=', $combination->id_combination)->delete();
+			return response(['success' => true]);
+		}
+		return response(['success' => false], 401);
 	}
 }

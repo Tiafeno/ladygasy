@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\AdminAttributeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CombinationController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,16 +22,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/products/{slug}');
+Route::get('/categories/{slug}');
+Route::post('cart', [CartController::class, 'create'])->name('update.cart');
+
 Route::redirect('ld-admin/', 'ld-admin/dashboard');
 Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], function () {
   Route::get('products', [AdminController::class, 'index_product_admin'])->name('index.admin.product');
   Route::post('products', [AdminController::class, 'store_product_admin'])->name('store.admin.product');
-
-  // Combination
   Route::get('product/{id_product}/combinations', [CombinationController::class, 'fetch'])->name('product.combination');
   Route::get('product/{id_product}', [AdminController::class, 'fetch'])->name('product');
   Route::put('product/{id_product}', [AdminController::class, 'update_product'])->name('update.product');
   Route::post('product/{id_product}/image', [AdminController::class, 'update_image_product'])->name('update.image.product');
+  Route::delete('product/{id_product}/image', [AdminController::class, 'remove_image_product'])->name('remove.image.product');
   Route::put('combination/{id_combination}', [CombinationController::class, 'update_combination'])->name('update.combination');
   Route::delete('combination/{id_combination}', [CombinationController::class, 'delete_combination'])->name('delete.combination');
   Route::post('product/{id_product}/combination', [CombinationController::class, 'product_combination'])->name('post.product.combination');
@@ -63,7 +68,7 @@ Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], fun
 Route::group(['prefix' => 'esp-client', 'middleware' => ['auth']], function() {
   Route::redirect('/', 'esp-client/me');
 });
-
+Route::get('i/p/{size}/{image}', [ImageController::class, 'image'])->name('image');
 Auth::routes();
 
 

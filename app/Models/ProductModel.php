@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductModel extends Model
 {
@@ -75,7 +76,45 @@ class ProductModel extends Model
 		return true;
 	}
 
-	public function removeCategory($id_category) {
+	public function getDefaultAttribute()
+	{
+		$attribute_join = DB::table('product_attribute');
+		$attribute_join->where([
+				'id_product' => $this->id_product
+		]);
+		$min_price = $attribute_join->min('price');
+		$result = $attribute_join->where([
+				'price' => intval($min_price)
+		])->first();
+		if ($result) {
+			$combination = DB::table('combinations')
+					->where('id_product_attribute', $result->id_product_attribute)
+					->first();
+			if ($combination) {
+				$attribute = AttributeModel::query()
+						->where('id_attribute', $combination->id_attribute)
+						->first();
+				if ($attribute) {
+					return [
+							'attribute_id' => $attribute->id_attribute,
+							'name' => $attribute->name,
+							'price' => $result->price,
+							'quantity' => $result->quantity
+					];
+				}
+			}
+		}
+
+		return [
+				'attribute_id' => 0,
+				'name' => '',
+				'price' => $this->price,
+				'quantity' => $this->quantity
+		];
+	}
+
+	public function removeCategory($id_category)
+	{
 		$category_join = DB::table('product_has_category')
 				->where([
 						'id_product' => $this->id_product,
@@ -83,6 +122,15 @@ class ProductModel extends Model
 				])
 				->first();
 		if ($category_join) $category_join->delete();
+	}
+
+	public function getImage(): ?string
+	{
+		$image_name = $this->image;
+		if ($image_name) {
+			return Storage::disk('local')->url('product/' . $image_name);
+		}
+		return null;
 	}
 
 }

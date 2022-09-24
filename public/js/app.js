@@ -17188,6 +17188,8 @@ var doHTTP_1 = __webpack_require__(/*! ../doHTTP */ "./resources/js/doHTTP.ts");
 
 var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
+var notiflix_1 = __webpack_require__(/*! notiflix */ "./node_modules/notiflix/dist/notiflix-aio-3.2.5.min.js");
+
 exports["default"] = (0, vue_1.defineComponent)({
   name: "ProductEditor",
   components: {
@@ -17211,6 +17213,9 @@ exports["default"] = (0, vue_1.defineComponent)({
     var reference = (0, vue_1.ref)('');
     var active = (0, vue_1.ref)(false);
     var price = (0, vue_1.ref)(0);
+    var image = (0, vue_1.ref)('');
+    var imageUrl = (0, vue_1.ref)('');
+    var combination_default_on = (0, vue_1.ref)(0);
     var quantity = (0, vue_1.ref)(1);
     var categories = (0, vue_1.ref)([]); // Tous les categories disponible
 
@@ -17289,51 +17294,154 @@ exports["default"] = (0, vue_1.defineComponent)({
       });
     });
 
+    var removeImage = function removeImage() {
+      return __awaiter(_this, void 0, void 0, function () {
+        var _this = this;
+
+        return __generator(this, function (_a) {
+          notiflix_1.Confirm.show('Confirmation', 'Voulez vous vraiment supprimer l\'image?', 'Oui', 'Non', function () {
+            return __awaiter(_this, void 0, void 0, function () {
+              var argConf, response;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    notiflix_1.Loading.standard("Loading...", {
+                      clickToClose: false
+                    });
+                    argConf = {
+                      url: route('remove.image.product', {
+                        id_product: ID.value
+                      }),
+                      method: "DELETE"
+                    };
+                    return [4
+                    /*yield*/
+                    , (0, doHTTP_1.doHTTP)(argConf)];
+
+                  case 1:
+                    response = _a.sent();
+                    notiflix_1.Loading.remove();
+                    if (!(response.status == 200)) return [3
+                    /*break*/
+                    , 3];
+                    return [4
+                    /*yield*/
+                    , populateForm()];
+
+                  case 2:
+                    _a.sent();
+
+                    _a.label = 3;
+
+                  case 3:
+                    return [2
+                    /*return*/
+                    ];
+                }
+              });
+            });
+          }, function () {
+            return __awaiter(_this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                return [2
+                /*return*/
+                ];
+              });
+            });
+          }, {});
+          return [2
+          /*return*/
+          ];
+        });
+      });
+    };
+
     var loadFile = function loadFile(event) {
       return __awaiter(_this, void 0, void 0, function () {
-        var reader, formData, args, uploadResponse;
+        var _this = this;
+
         return __generator(this, function (_a) {
-          switch (_a.label) {
-            case 0:
-              reader = new FileReader();
+          notiflix_1.Confirm.show('Confirmation', 'Voulez vous remplacé l\'ancienne image par celui-ci ?', 'Oui', 'Non', function () {
+            return __awaiter(_this, void 0, void 0, function () {
+              var formData, args, uploadResponse, e_1;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    file.value = event.target.files[0];
+                    if (!ID.value) return [3
+                    /*break*/
+                    , 7];
+                    formData = new FormData();
+                    formData.append('file', file.value);
+                    notiflix_1.Loading.standard("Loading...", {
+                      clickToClose: false
+                    });
+                    _a.label = 1;
 
-              reader.onload = function () {
-                var output = document.getElementById('data-dz-thumbnail');
-                var el = document.getElementById('uploadPreviewTemplate');
-                el.classList.remove('d-none');
-                output.src = reader.result;
-              };
+                  case 1:
+                    _a.trys.push([1, 5,, 6]);
 
-              file.value = event.target.files[0];
-              reader.readAsDataURL(event.target.files[0]);
-              if (!ID.value) return [3
-              /*break*/
-              , 2];
-              formData = new FormData();
-              formData.append('file', file.value);
-              args = {
-                url: route('update.image.product', {
-                  id_product: ID.value
-                }),
-                headers: {
-                  "Content-Type": "multipart/form-data"
-                },
-                method: "post",
-                data: formData
-              };
-              return [4
-              /*yield*/
-              , (0, doHTTP_1.doHTTP)(args)];
+                    args = {
+                      url: route('update.image.product', {
+                        id_product: ID.value
+                      }),
+                      headers: {
+                        "Content-Type": "multipart/form-data"
+                      },
+                      method: "post",
+                      data: formData
+                    };
+                    return [4
+                    /*yield*/
+                    , (0, doHTTP_1.doHTTP)(args)];
 
-            case 1:
-              uploadResponse = _a.sent();
-              _a.label = 2;
+                  case 2:
+                    uploadResponse = _a.sent();
+                    if (!(uploadResponse.status == 200)) return [3
+                    /*break*/
+                    , 4];
+                    return [4
+                    /*yield*/
+                    , populateForm()];
 
-            case 2:
-              return [2
-              /*return*/
-              ];
-          }
+                  case 3:
+                    _a.sent();
+
+                    _a.label = 4;
+
+                  case 4:
+                    return [3
+                    /*break*/
+                    , 6];
+
+                  case 5:
+                    e_1 = _a.sent();
+                    notiflix_1.Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
+                    return [3
+                    /*break*/
+                    , 6];
+
+                  case 6:
+                    notiflix_1.Loading.remove();
+                    return [3
+                    /*break*/
+                    , 8];
+
+                  case 7:
+                    notiflix_1.Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
+                    _a.label = 8;
+
+                  case 8:
+                    return [2
+                    /*return*/
+                    ];
+                }
+              });
+            });
+          }, function () {}, {});
+          return [2
+          /*return*/
+          ];
         });
       });
     };
@@ -17344,7 +17452,7 @@ exports["default"] = (0, vue_1.defineComponent)({
 
     var fetchCombination = function fetchCombination() {
       return __awaiter(_this, void 0, void 0, function () {
-        var config, response, data, e_1;
+        var config, response, data, default_combination, e_2;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -17372,6 +17480,13 @@ exports["default"] = (0, vue_1.defineComponent)({
 
               if (response.status === 200) {
                 combinations.value = (0, lodash_1.cloneDeep)(data);
+                default_combination = (0, lodash_1.find)(combinations.value, function (v) {
+                  return v.default_on;
+                });
+
+                if (default_combination) {
+                  combination_default_on.value = default_combination.id;
+                }
               }
 
               return [3
@@ -17379,7 +17494,7 @@ exports["default"] = (0, vue_1.defineComponent)({
               , 4];
 
             case 3:
-              e_1 = _a.sent();
+              e_2 = _a.sent();
               return [3
               /*break*/
               , 4];
@@ -17406,12 +17521,18 @@ exports["default"] = (0, vue_1.defineComponent)({
     var populateForm = function populateForm() {
       return __awaiter(_this, void 0, void 0, function () {
         var conf, response, data;
-        return __generator(this, function (_a) {
-          switch (_a.label) {
+
+        var _a, _b;
+
+        return __generator(this, function (_c) {
+          switch (_c.label) {
             case 0:
               if (!ID.value) return [3
               /*break*/
               , 2];
+              notiflix_1.Loading.standard("Chargement...", {
+                clickToClose: false
+              });
               conf = {
                 url: route('product', {
                   id_product: ID.value
@@ -17423,7 +17544,7 @@ exports["default"] = (0, vue_1.defineComponent)({
               , (0, doHTTP_1.doHTTP)(conf)];
 
             case 1:
-              response = _a.sent();
+              response = _c.sent();
 
               if (response.status === 200) {
                 data = response.data;
@@ -17439,10 +17560,14 @@ exports["default"] = (0, vue_1.defineComponent)({
                 active.value = Boolean(data.active);
                 category.value = (0, lodash_1.map)(data.categories, function (cat) {
                   return cat.id_category;
-                });
+                }); // show image
+
+                imageUrl.value = (_a = data.image_url) !== null && _a !== void 0 ? _a : '';
+                image.value = (_b = data.image) !== null && _b !== void 0 ? _b : '';
               }
 
-              _a.label = 2;
+              notiflix_1.Loading.remove();
+              _c.label = 2;
 
             case 2:
               return [2
@@ -17455,7 +17580,7 @@ exports["default"] = (0, vue_1.defineComponent)({
 
     var submitProduct = function submitProduct() {
       return __awaiter(_this, void 0, void 0, function () {
-        var error, arg, response, e_2, arg, response, e_3;
+        var error, arg, response, e_3, arg, response, e_4;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -17508,7 +17633,7 @@ exports["default"] = (0, vue_1.defineComponent)({
               , 4];
 
             case 3:
-              e_2 = _a.sent();
+              e_3 = _a.sent();
               error = true;
               return [3
               /*break*/
@@ -17556,7 +17681,7 @@ exports["default"] = (0, vue_1.defineComponent)({
               , 9];
 
             case 8:
-              e_3 = _a.sent();
+              e_4 = _a.sent();
               error = true;
               return [3
               /*break*/
@@ -17597,9 +17722,13 @@ exports["default"] = (0, vue_1.defineComponent)({
               /*break*/
               , 2];
               promiseCall = [];
+              notiflix_1.Loading.standard("Chargement...", {
+                clickToClose: false
+              });
 
               for (_i = 0, _a = combinations.value; _i < _a.length; _i++) {
                 combination = _a[_i];
+                combination.default_on = combination_default_on.value === combination.id;
                 arg = {
                   url: route('update.combination', {
                     id_combination: combination.id
@@ -17616,6 +17745,7 @@ exports["default"] = (0, vue_1.defineComponent)({
 
             case 1:
               responseAll = _b.sent();
+              notiflix_1.Loading.remove();
               _b.label = 2;
 
             case 2:
@@ -17625,12 +17755,78 @@ exports["default"] = (0, vue_1.defineComponent)({
           }
         });
       });
-    }; // Crée une combinaison de produit
+    };
 
+    var deleteCombination = function deleteCombination(idCombination) {
+      return __awaiter(_this, void 0, void 0, function () {
+        var _this = this;
+
+        return __generator(this, function (_a) {
+          // Vérifier si la combination est par default
+          if (combination_default_on.value === idCombination) {
+            combination_default_on.value = 0;
+          }
+
+          notiflix_1.Confirm.show('Confirmation', 'Voulez vous vraiment supprimer l\'attribut?', 'Oui', 'Non', function () {
+            return __awaiter(_this, void 0, void 0, function () {
+              var configDelete, response;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    notiflix_1.Loading.standard("Loading...", {
+                      clickToClose: false
+                    });
+                    configDelete = {
+                      url: route('delete.combination', {
+                        id_combination: idCombination
+                      }),
+                      method: "DELETE"
+                    };
+                    return [4
+                    /*yield*/
+                    , (0, doHTTP_1.doHTTP)(configDelete)];
+
+                  case 1:
+                    response = _a.sent();
+                    notiflix_1.Loading.remove();
+                    if (!(response.status == 200)) return [3
+                    /*break*/
+                    , 3];
+                    return [4
+                    /*yield*/
+                    , fetchCombination()];
+
+                  case 2:
+                    _a.sent();
+
+                    _a.label = 3;
+
+                  case 3:
+                    return [2
+                    /*return*/
+                    ];
+                }
+              });
+            });
+          }, function () {
+            return __awaiter(_this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                return [2
+                /*return*/
+                ];
+              });
+            });
+          }, {});
+          return [2
+          /*return*/
+          ];
+        });
+      });
+    };
 
     var generateCombination = function generateCombination() {
       return __awaiter(_this, void 0, void 0, function () {
-        var attrIds, arg, response, e_4;
+        var attrIds, arg, response, e_5;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -17661,6 +17857,7 @@ exports["default"] = (0, vue_1.defineComponent)({
               attrIds = (0, lodash_1.map)(combinationValues.value, function (attr) {
                 return attr.id_attribute;
               });
+              notiflix_1.Loading.standard('Création en cours ...');
               arg = {
                 url: route('post.product.combination', {
                   id_product: ID.value
@@ -17698,13 +17895,15 @@ exports["default"] = (0, vue_1.defineComponent)({
               _a.label = 6;
 
             case 6:
+              notiflix_1.Loading.remove();
               return [3
               /*break*/
               , 8];
 
             case 7:
-              e_4 = _a.sent();
-              console.log(e_4);
+              e_5 = _a.sent();
+              notiflix_1.Loading.remove();
+              notiflix_1.Notify.failure(e_5);
               return [3
               /*break*/
               , 8];
@@ -17722,7 +17921,6 @@ exports["default"] = (0, vue_1.defineComponent)({
       recap: recap,
       title: title,
       type: type,
-      pushCombination: pushCombination,
       combinationValues: combinationValues,
       quantity: quantity,
       description: description,
@@ -17737,9 +17935,15 @@ exports["default"] = (0, vue_1.defineComponent)({
       quillRecap: quillRecap,
       quillDesc: quillDesc,
       file: file,
+      image: image,
+      imageUrl: imageUrl,
+      combination_default_on: combination_default_on,
+      pushCombination: pushCombination,
       loadFile: loadFile,
       triggerUploadInput: triggerUploadInput,
       generateCombination: generateCombination,
+      removeImage: removeImage,
+      deleteCombination: deleteCombination,
       submitProduct: submitProduct
     };
   }
@@ -17924,7 +18128,10 @@ exports["default"] = (0, vue_1.defineComponent)({
               loading.value = true;
               config = {
                 url: route('admin.products'),
-                method: 'options'
+                method: 'options',
+                data: {
+                  image: 'cart'
+                }
               };
               _a.label = 1;
 
@@ -18743,162 +18950,204 @@ var _hoisted_12 = {
 var _hoisted_13 = {
   "class": "mb-3"
 };
-var _hoisted_14 = {
-  "class": "dz-message needsclick"
-};
-var _hoisted_15 = {
-  "class": "d-none"
-};
 
-var _hoisted_16 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
-  "class": "h1 text-muted dripicons-cloud-upload"
-}, null, -1
-/* HOISTED */
-);
-
-var _hoisted_17 = /*#__PURE__*/(0, vue_1.createElementVNode)("h3", null, "Click to upload.", -1
-/* HOISTED */
-);
-
-var _hoisted_18 = /*#__PURE__*/(0, vue_1.createStaticVNode)("<div class=\"d-none\" id=\"uploadPreviewTemplate\"><div class=\"card mt-1 mb-0 shadow-none border\"><div class=\"p-2\"><div class=\"row align-items-center\"><div class=\"col-auto\"><img id=\"data-dz-thumbnail\" src=\"#\" class=\"avatar-sm rounded bg-light\" alt=\"\"></div><div class=\"col ps-0\"><a href=\"javascript:void(0);\" class=\"text-muted fw-bold\" data-dz-name></a><p class=\"mb-0\" data-dz-size></p></div><div class=\"col-auto\"><!-- Button --><a href=\"\" class=\"btn btn-link btn-lg text-muted\" data-dz-remove><i class=\"dripicons-cross\"></i></a></div></div></div></div></div>", 1);
-
-var _hoisted_19 = {
-  "class": "mb-3"
-};
-
-var _hoisted_20 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
+var _hoisted_14 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
   "class": "text-title mb-2"
 }, "Récapitulatif", -1
 /* HOISTED */
 );
 
-var _hoisted_21 = {
+var _hoisted_15 = {
   "class": "mb-3"
 };
 
-var _hoisted_22 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
+var _hoisted_16 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
   "class": "text-title mb-2"
 }, "Description", -1
 /* HOISTED */
 );
 
-var _hoisted_23 = {
+var _hoisted_17 = {
   "class": "col-md-4"
 };
+var _hoisted_18 = {
+  "class": "mb-3"
+};
+var _hoisted_19 = {
+  "class": "dz-message needsclick"
+};
+var _hoisted_20 = {
+  "class": "d-none"
+};
+
+var _hoisted_21 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
+  "class": "h1 text-muted dripicons-cloud-upload"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_22 = /*#__PURE__*/(0, vue_1.createElementVNode)("h3", null, "Click to upload.", -1
+/* HOISTED */
+);
+
+var _hoisted_23 = {
+  key: 0,
+  id: "uploadPreviewTemplate"
+};
 var _hoisted_24 = {
-  "class": "mb-3"
+  "class": "card mt-1 mb-0 shadow-none border"
 };
-
-var _hoisted_25 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
-  "class": "mb-2"
-}, "Combinations", -1
-/* HOISTED */
-);
-
+var _hoisted_25 = {
+  "class": "p-2"
+};
 var _hoisted_26 = {
-  "class": "form-check"
+  "class": "row align-items-center"
 };
+var _hoisted_27 = {
+  "class": "col-auto"
+};
+var _hoisted_28 = ["href"];
+var _hoisted_29 = ["src"];
 
-var _hoisted_27 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
-  "class": "form-check-label",
-  "for": "customRadio1"
-}, "Produit simple", -1
+var _hoisted_30 = /*#__PURE__*/(0, vue_1.createElementVNode)("div", {
+  "class": "col ps-0"
+}, null, -1
 /* HOISTED */
 );
 
-var _hoisted_28 = {
-  "class": "form-check"
+var _hoisted_31 = {
+  "class": "col-auto"
 };
 
-var _hoisted_29 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
-  "class": "form-check-label",
-  "for": "customRadio2"
-}, "Produit avec combinaisons", -1
+var _hoisted_32 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
+  "class": "dripicons-cross"
+}, null, -1
 /* HOISTED */
 );
 
-var _hoisted_30 = {
-  "class": "mb-3"
-};
-
-var _hoisted_31 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
-  "class": "mb-2"
-}, "Reference", -1
-/* HOISTED */
-);
-
-var _hoisted_32 = {
-  "class": "mb-3"
-};
-
-var _hoisted_33 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
-  "class": "mb-2"
-}, "Prix", -1
-/* HOISTED */
-);
-
+var _hoisted_33 = [_hoisted_32];
 var _hoisted_34 = {
   "class": "mb-3"
 };
 
 var _hoisted_35 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
   "class": "mb-2"
-}, "Categories", -1
+}, "Combinations", -1
 /* HOISTED */
 );
 
 var _hoisted_36 = {
-  "class": "tab-pane",
-  id: "des-b1"
+  "class": "form-check"
 };
 
-var _hoisted_37 = /*#__PURE__*/(0, vue_1.createElementVNode)("h6", {
-  "class": "font-13 mt-3"
-}, "Auto-sizing", -1
+var _hoisted_37 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+  "class": "form-check-label",
+  "for": "customRadio1"
+}, "Produit simple", -1
 /* HOISTED */
 );
 
 var _hoisted_38 = {
+  "class": "form-check"
+};
+
+var _hoisted_39 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+  "class": "form-check-label",
+  "for": "customRadio2"
+}, "Produit avec combinaisons", -1
+/* HOISTED */
+);
+
+var _hoisted_40 = {
+  "class": "mb-3"
+};
+
+var _hoisted_41 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+  "class": "mb-2"
+}, "Reference", -1
+/* HOISTED */
+);
+
+var _hoisted_42 = {
+  "class": "mb-3"
+};
+
+var _hoisted_43 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+  "class": "mb-2"
+}, "Prix", -1
+/* HOISTED */
+);
+
+var _hoisted_44 = {
+  "class": "mb-3"
+};
+
+var _hoisted_45 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+  "class": "mb-2"
+}, "Categories", -1
+/* HOISTED */
+);
+
+var _hoisted_46 = {
+  "class": "tab-pane",
+  id: "des-b1"
+};
+var _hoisted_47 = {
   "class": "row"
 };
-var _hoisted_39 = {
+var _hoisted_48 = {
   "class": "col-md-8"
 };
-var _hoisted_40 = {
+var _hoisted_49 = {
   "class": "table table-hover table-centered mb-0"
 };
 
-var _hoisted_41 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Prix", -1
+var _hoisted_50 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Prix", -1
 /* HOISTED */
 );
 
-var _hoisted_42 = ["onUpdate:modelValue"];
+var _hoisted_51 = ["onUpdate:modelValue"];
 
-var _hoisted_43 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Quantité", -1
+var _hoisted_52 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Quantité", -1
 /* HOISTED */
 );
 
-var _hoisted_44 = ["onUpdate:modelValue"];
-var _hoisted_45 = ["onUpdate:modelValue", "checked"];
-var _hoisted_46 = {
+var _hoisted_53 = ["onUpdate:modelValue"];
+
+var _hoisted_54 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Reference", -1
+/* HOISTED */
+);
+
+var _hoisted_55 = ["onUpdate:modelValue"];
+var _hoisted_56 = ["value", "checked"];
+var _hoisted_57 = ["onClick"];
+
+var _hoisted_58 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
+  "class": "mdi mdi-trash-can"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_59 = [_hoisted_58];
+var _hoisted_60 = {
   "class": "col-md-4"
 };
-var _hoisted_47 = {
+var _hoisted_61 = {
   "class": "position-absolute"
 };
-var _hoisted_48 = {
+var _hoisted_62 = {
   "class": "form-check form-switch"
 };
-var _hoisted_49 = ["checked"];
+var _hoisted_63 = ["checked"];
 
-var _hoisted_50 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+var _hoisted_64 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
   "class": "form-check-label",
   "for": "customSwitch1"
 }, "Active", -1
 /* HOISTED */
 );
 
-var _hoisted_51 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
+var _hoisted_65 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
   "class": "btn btn-success",
   type: "submit"
 }, "Enregistrer", -1
@@ -18925,7 +19174,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })])]), (0, vue_1.createElementVNode)("form", {
-    onSubmit: _cache[12] || (_cache[12] = (0, vue_1.withModifiers)( //@ts-ignore
+    onSubmit: _cache[14] || (_cache[14] = (0, vue_1.withModifiers)( //@ts-ignore
     function () {
       var args = [];
 
@@ -18943,11 +19192,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     placeholder: "Saisissez le nom de votre produit"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.title]])]), (0, vue_1.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0, vue_1.createElementVNode)("div", _hoisted_9, [(0, vue_1.createElementVNode)("div", _hoisted_10, [(0, vue_1.createElementVNode)("div", _hoisted_11, [(0, vue_1.createElementVNode)("div", _hoisted_12, [(0, vue_1.createElementVNode)("div", _hoisted_13, [(0, vue_1.createElementVNode)("form", {
+  ), [[vue_1.vModelText, _ctx.title]])]), (0, vue_1.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0, vue_1.createElementVNode)("div", _hoisted_9, [(0, vue_1.createElementVNode)("div", _hoisted_10, [(0, vue_1.createElementVNode)("div", _hoisted_11, [(0, vue_1.createElementVNode)("div", _hoisted_12, [(0, vue_1.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0, vue_1.createVNode)(_component_QuillEditor, {
+    ref: "quillRecap",
+    content: _ctx.recap,
+    "onUpdate:content": _cache[1] || (_cache[1] = function ($event) {
+      return _ctx.recap = $event;
+    }),
+    "content-type": "html",
+    theme: "snow"
+  }, null, 8
+  /* PROPS */
+  , ["content"])]), (0, vue_1.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0, vue_1.createVNode)(_component_QuillEditor, {
+    ref: "quillDesc",
+    content: _ctx.description,
+    "onUpdate:content": _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.description = $event;
+    }),
+    "content-type": "html",
+    theme: "snow"
+  }, null, 8
+  /* PROPS */
+  , ["content"])])]), (0, vue_1.createElementVNode)("div", _hoisted_17, [(0, vue_1.createElementVNode)("div", _hoisted_18, [(0, vue_1.createElementVNode)("form", {
     action: "/target",
     "class": "dropzone",
     id: "my-great-dropzone",
-    onClick: _cache[2] || (_cache[2] = //@ts-ignore
+    onClick: _cache[4] || (_cache[4] = //@ts-ignore
     function () {
       var args = [];
 
@@ -18957,11 +19226,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
       return _ctx.triggerUploadInput && _ctx.triggerUploadInput.apply(_ctx, args);
     })
-  }, [(0, vue_1.createElementVNode)("div", _hoisted_14, [(0, vue_1.createElementVNode)("div", _hoisted_15, [(0, vue_1.createElementVNode)("input", {
+  }, [(0, vue_1.createElementVNode)("div", _hoisted_19, [(0, vue_1.createElementVNode)("div", _hoisted_20, [(0, vue_1.createElementVNode)("input", {
     type: "file",
     id: "product-image",
     accept: "image/*",
-    onChange: _cache[1] || (_cache[1] = //@ts-ignore
+    onChange: _cache[3] || (_cache[3] = //@ts-ignore
     function () {
       var args = [];
 
@@ -18973,63 +19242,68 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 32
   /* HYDRATE_EVENTS */
-  )]), _hoisted_16, _hoisted_17])]), _hoisted_18]), (0, vue_1.createElementVNode)("div", _hoisted_19, [_hoisted_20, (0, vue_1.createVNode)(_component_QuillEditor, {
-    ref: "quillRecap",
-    content: _ctx.recap,
-    "onUpdate:content": _cache[3] || (_cache[3] = function ($event) {
-      return _ctx.recap = $event;
-    }),
-    "content-type": "html",
-    theme: "snow"
+  )]), _hoisted_21, _hoisted_22])]), _ctx.image ? ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_23, [(0, vue_1.createElementVNode)("div", _hoisted_24, [(0, vue_1.createElementVNode)("div", _hoisted_25, [(0, vue_1.createElementVNode)("div", _hoisted_26, [(0, vue_1.createElementVNode)("div", _hoisted_27, [(0, vue_1.createElementVNode)("a", {
+    target: "_blank",
+    href: _ctx.imageUrl
+  }, [(0, vue_1.createElementVNode)("img", {
+    id: "data-dz-thumbnail",
+    src: _ctx.imageUrl,
+    "class": "avatar-sm rounded bg-light",
+    alt: ""
   }, null, 8
   /* PROPS */
-  , ["content"])]), (0, vue_1.createElementVNode)("div", _hoisted_21, [_hoisted_22, (0, vue_1.createVNode)(_component_QuillEditor, {
-    ref: "quillDesc",
-    content: _ctx.description,
-    "onUpdate:content": _cache[4] || (_cache[4] = function ($event) {
-      return _ctx.description = $event;
-    }),
-    "content-type": "html",
-    theme: "snow"
-  }, null, 8
+  , _hoisted_29)], 8
   /* PROPS */
-  , ["content"])])]), (0, vue_1.createElementVNode)("div", _hoisted_23, [(0, vue_1.createElementVNode)("div", _hoisted_24, [_hoisted_25, (0, vue_1.createElementVNode)("div", _hoisted_26, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  , _hoisted_28)]), _hoisted_30, (0, vue_1.createElementVNode)("div", _hoisted_31, [(0, vue_1.createCommentVNode)(" Button "), (0, vue_1.createElementVNode)("a", {
+    onClick: _cache[5] || (_cache[5] = (0, vue_1.withModifiers)( //@ts-ignore
+    function () {
+      var args = [];
+
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+
+      return _ctx.removeImage && _ctx.removeImage.apply(_ctx, args);
+    }, ["prevent"])),
+    "class": "btn btn-link btn-lg text-muted",
+    "data-dz-remove": ""
+  }, _hoisted_33)])])])])])) : (0, vue_1.createCommentVNode)("v-if", true)]), (0, vue_1.createElementVNode)("div", _hoisted_34, [_hoisted_35, (0, vue_1.createElementVNode)("div", _hoisted_36, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "radio",
     id: "customRadio1",
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return _ctx.type = $event;
     }),
     value: "simple",
     "class": "form-check-input"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelRadio, _ctx.type]]), _hoisted_27]), (0, vue_1.createElementVNode)("div", _hoisted_28, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  ), [[vue_1.vModelRadio, _ctx.type]]), _hoisted_37]), (0, vue_1.createElementVNode)("div", _hoisted_38, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "radio",
     id: "customRadio2",
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
       return _ctx.type = $event;
     }),
     value: "combination",
     "class": "form-check-input"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelRadio, _ctx.type]]), _hoisted_29])]), (0, vue_1.createElementVNode)("div", _hoisted_30, [_hoisted_31, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  ), [[vue_1.vModelRadio, _ctx.type]]), _hoisted_39])]), (0, vue_1.createElementVNode)("div", _hoisted_40, [_hoisted_41, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "text",
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
       return _ctx.reference = $event;
     }),
     "class": "form-control"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.reference]])])]), (0, vue_1.createElementVNode)("div", _hoisted_32, [_hoisted_33, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  ), [[vue_1.vModelText, _ctx.reference]])])]), (0, vue_1.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "number",
-    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
       return _ctx.price = $event;
     }),
     "class": "form-control"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_34, [_hoisted_35, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
+  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_44, [_hoisted_45, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
     taggable: "",
     multiple: "",
     options: _ctx.categories,
@@ -19038,17 +19312,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return ctg.id_category;
     },
     modelValue: _ctx.category,
-    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+    "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
       return _ctx.category = $event;
     })
   }, null, 8
   /* PROPS */
-  , ["options", "reduce", "modelValue"])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_36, [(0, vue_1.createElementVNode)("div", null, [_hoisted_37, (0, vue_1.createElementVNode)("div", _hoisted_38, [(0, vue_1.createElementVNode)("div", _hoisted_39, [(0, vue_1.createElementVNode)("table", _hoisted_40, [(0, vue_1.createElementVNode)("tbody", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.combinations, function (combination, index) {
-    return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("tr", null, [(0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.name), 1
+  , ["options", "reduce", "modelValue"])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_46, [(0, vue_1.createElementVNode)("div", null, [(0, vue_1.createElementVNode)("div", _hoisted_47, [(0, vue_1.createElementVNode)("div", _hoisted_48, [(0, vue_1.createElementVNode)("table", _hoisted_49, [(0, vue_1.createElementVNode)("tbody", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.combinations, function (combination, index) {
+    return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("tr", null, [(0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.id), 1
     /* TEXT */
-    ), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.reference), 1
+    ), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.name), 1
     /* TEXT */
-    ), (0, vue_1.createElementVNode)("td", null, [_hoisted_41, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    ), (0, vue_1.createElementVNode)("td", null, [_hoisted_50, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].price = $event;
@@ -19056,7 +19330,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_42), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_43, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    , _hoisted_51), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_52, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].quantity = $event;
@@ -19064,20 +19338,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_44), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
-      type: "checkbox",
+    , _hoisted_53), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_54, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+      type: "text",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
-        return _ctx.combinations[index].default_on = $event;
+        return combination.reference = $event;
       },
-      checked: _ctx.combinations[index].default_on,
+      "class": "form-control"
+    }, null, 8
+    /* PROPS */
+    , _hoisted_55), [[vue_1.vModelText, combination.reference]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+      type: "radio",
+      "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+        return _ctx.combination_default_on = $event;
+      }),
+      value: combination.id,
+      checked: _ctx.combination_default_on === combination.id,
       name: "default",
       "class": "form-check-input"
     }, null, 8
     /* PROPS */
-    , _hoisted_45), [[vue_1.vModelCheckbox, _ctx.combinations[index].default_on]])])]);
+    , _hoisted_56), [[vue_1.vModelRadio, _ctx.combination_default_on]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("span", {
+      "class": "action-icon",
+      onClick: function onClick($event) {
+        return _ctx.deleteCombination(combination.id);
+      }
+    }, _hoisted_59, 8
+    /* PROPS */
+    , _hoisted_57)])]);
   }), 256
   /* UNKEYED_FRAGMENT */
-  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_46, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
+  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_60, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
     return (0, vue_1.openBlock)(), (0, vue_1.createBlock)(_component_attribute_combination_group, {
       group: g,
       onUpdateAttr: _ctx.pushCombination
@@ -19088,7 +19378,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* UNKEYED_FRAGMENT */
   )), (0, vue_1.createElementVNode)("button", {
     "class": "btn btn-success",
-    onClick: _cache[10] || (_cache[10] = //@ts-ignore
+    onClick: _cache[12] || (_cache[12] = //@ts-ignore
     function () {
       var args = [];
 
@@ -19099,9 +19389,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _ctx.generateCombination && _ctx.generateCombination.apply(_ctx, args);
     }),
     type: "button"
-  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_47, [(0, vue_1.createElementVNode)("div", _hoisted_48, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_61, [(0, vue_1.createElementVNode)("div", _hoisted_62, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "checkbox",
-    "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+    "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
       return _ctx.active = $event;
     }),
     checked: _ctx.active,
@@ -19109,7 +19399,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "customSwitch1"
   }, null, 8
   /* PROPS */
-  , _hoisted_49), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_50]), _hoisted_51])], 32
+  , _hoisted_63), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_64]), _hoisted_65])], 32
   /* HYDRATE_EVENTS */
   )]);
 }
@@ -19182,22 +19472,12 @@ var _hoisted_8 = /*#__PURE__*/(0, vue_1.createElementVNode)("thead", {
 /* HOISTED */
 );
 
-var _hoisted_9 = /*#__PURE__*/(0, vue_1.createElementVNode)("td", null, null, -1
-/* HOISTED */
-);
-
-var _hoisted_10 = /*#__PURE__*/(0, vue_1.createElementVNode)("td", null, null, -1
-/* HOISTED */
-);
-
-var _hoisted_11 = {
-  "class": "badge bg-success"
-};
-var _hoisted_12 = {
+var _hoisted_9 = ["src"];
+var _hoisted_10 = {
   "class": "table-action"
 };
 
-var _hoisted_13 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
+var _hoisted_11 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
   "class": "mdi mdi-square-edit-outline"
 }, null, -1
 /* HOISTED */
@@ -19219,17 +19499,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })]), _hoisted_5, (0, vue_1.createCommentVNode)(" end col")]), (0, vue_1.createElementVNode)("div", _hoisted_6, [(0, vue_1.createElementVNode)("table", _hoisted_7, [_hoisted_8, (0, vue_1.createElementVNode)("tbody", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.products, function (product) {
+    var _a;
+
     return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("tr", null, [(0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(product.id_product), 1
     /* TEXT */
-    ), _hoisted_9, (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(product.name), 1
+    ), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("img", {
+      src: product.image_url,
+      "class": "rounded me-3",
+      height: "35"
+    }, null, 8
+    /* PROPS */
+    , _hoisted_9)]), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(product.name), 1
     /* TEXT */
-    ), _hoisted_10, (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(product.price), 1
+    ), (0, vue_1.createElementVNode)("td", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(product.categories, function (cat) {
+      return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("span", {
+        key: cat.id_category,
+        "class": "badge badge-warning-lighten"
+      }, (0, vue_1.toDisplayString)(cat.name), 1
+      /* TEXT */
+      );
+    }), 128
+    /* KEYED_FRAGMENT */
+    ))]), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)((_a = product.price) !== null && _a !== void 0 ? _a : 0) + " MGA", 1
     /* TEXT */
     ), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(product.quantity), 1
     /* TEXT */
-    ), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("span", _hoisted_11, (0, vue_1.toDisplayString)(product.active), 1
-    /* TEXT */
-    )]), (0, vue_1.createElementVNode)("td", _hoisted_12, [(0, vue_1.createVNode)(_component_router_link, {
+    ), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("span", {
+      "class": (0, vue_1.normalizeClass)(["badge", {
+        'bg-danger': !product.active,
+        'bg-success': product.active
+      }])
+    }, (0, vue_1.toDisplayString)(product.active ? "Actif" : "Désactiver"), 3
+    /* TEXT, CLASS */
+    )]), (0, vue_1.createElementVNode)("td", _hoisted_10, [(0, vue_1.createVNode)(_component_router_link, {
       to: {
         name: 'edit-product',
         params: {
@@ -19239,7 +19541,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "action-icon"
     }, {
       "default": (0, vue_1.withCtx)(function () {
-        return [_hoisted_13];
+        return [_hoisted_11];
       }),
       _: 2
       /* DYNAMIC */
