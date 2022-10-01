@@ -13,7 +13,19 @@
           <a  class="side-nav-link">
             <i class="uil-home-alt"></i>
             <span class="badge bg-success float-end">4</span>
-            <span> Dashboards </span>
+            <span> Tableau de board </span>
+          </a>
+        </li>
+        <li class="side-nav-item">
+          <a href="" class="side-nav-link">
+            <i class="uil-calender"></i>
+            <span> Commandes </span>
+          </a>
+        </li>
+        <li class="side-nav-item">
+          <a href="" class="side-nav-link">
+            <i class="uil-calender"></i>
+            <span> Panier </span>
           </a>
         </li>
 
@@ -39,6 +51,22 @@
             <span> Attributes et caractéristiques </span>
           </a>
         </li>
+
+        <li class="side-nav-item">
+          <a href="" class="side-nav-link">
+            <i class="uil-calender"></i>
+            <span> Articles </span>
+          </a>
+        </li>
+
+        <li class="side-nav-item">
+          <a href="{{route('index.admin.zone')}}" class="side-nav-link">
+            <i class="uil-calender"></i>
+            <span> Zone </span>
+          </a>
+        </li>
+
+
 
         <li class="side-nav-item">
           <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">

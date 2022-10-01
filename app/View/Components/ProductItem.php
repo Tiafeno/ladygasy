@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\ProductModel;
+use App\Services\ProductHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\View\Component;
 
@@ -39,7 +40,8 @@ class ProductItem extends Component
     {
         return view('components.product-item', [
 						'product' => $this->product,
-					'attribute' => $this->default_attribute
+						'attribute' => $this->default_attribute,
+						'url' => ProductHandler::getProductUrl($this->product->id_product, $this->default_attribute->product_attribute_id)
 				]);
     }
 }

@@ -17358,90 +17358,113 @@ exports["default"] = (0, vue_1.defineComponent)({
 
     var loadFile = function loadFile(event) {
       return __awaiter(_this, void 0, void 0, function () {
-        var _this = this;
-
         return __generator(this, function (_a) {
-          notiflix_1.Confirm.show('Confirmation', 'Voulez vous remplacé l\'ancienne image par celui-ci ?', 'Oui', 'Non', function () {
-            return __awaiter(_this, void 0, void 0, function () {
-              var formData, args, uploadResponse, e_1;
-              return __generator(this, function (_a) {
-                switch (_a.label) {
-                  case 0:
-                    file.value = event.target.files[0];
-                    if (!ID.value) return [3
-                    /*break*/
-                    , 7];
-                    formData = new FormData();
-                    formData.append('file', file.value);
-                    notiflix_1.Loading.standard("Loading...", {
-                      clickToClose: false
-                    });
-                    _a.label = 1;
+          switch (_a.label) {
+            case 0:
+              if (!file.value) return [3
+              /*break*/
+              , 1];
+              notiflix_1.Confirm.show('Confirmation', 'Voulez vous remplacé l\'ancienne image par celui-ci ?', 'Oui', 'Non', function () {
+                file.value = event.target.files[0];
+                uploadImage();
+              }, function () {}, {});
+              return [3
+              /*break*/
+              , 3];
 
-                  case 1:
-                    _a.trys.push([1, 5,, 6]);
+            case 1:
+              return [4
+              /*yield*/
+              , uploadImage()];
 
-                    args = {
-                      url: route('update.image.product', {
-                        id_product: ID.value
-                      }),
-                      headers: {
-                        "Content-Type": "multipart/form-data"
-                      },
-                      method: "post",
-                      data: formData
-                    };
-                    return [4
-                    /*yield*/
-                    , (0, doHTTP_1.doHTTP)(args)];
+            case 2:
+              _a.sent();
 
-                  case 2:
-                    uploadResponse = _a.sent();
-                    if (!(uploadResponse.status == 200)) return [3
-                    /*break*/
-                    , 4];
-                    return [4
-                    /*yield*/
-                    , populateForm()];
+              _a.label = 3;
 
-                  case 3:
-                    _a.sent();
+            case 3:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    };
 
-                    _a.label = 4;
-
-                  case 4:
-                    return [3
-                    /*break*/
-                    , 6];
-
-                  case 5:
-                    e_1 = _a.sent();
-                    notiflix_1.Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
-                    return [3
-                    /*break*/
-                    , 6];
-
-                  case 6:
-                    notiflix_1.Loading.remove();
-                    return [3
-                    /*break*/
-                    , 8];
-
-                  case 7:
-                    notiflix_1.Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
-                    _a.label = 8;
-
-                  case 8:
-                    return [2
-                    /*return*/
-                    ];
-                }
+    var uploadImage = function uploadImage() {
+      return __awaiter(_this, void 0, void 0, function () {
+        var formData, args, uploadResponse, e_1;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              if (!ID.value) return [3
+              /*break*/
+              , 7];
+              formData = new FormData();
+              formData.append('file', file.value);
+              notiflix_1.Loading.standard("Loading...", {
+                clickToClose: false
               });
-            });
-          }, function () {}, {});
-          return [2
-          /*return*/
-          ];
+              _a.label = 1;
+
+            case 1:
+              _a.trys.push([1, 5,, 6]);
+
+              args = {
+                url: route('update.image.product', {
+                  id_product: ID.value
+                }),
+                headers: {
+                  "Content-Type": "multipart/form-data"
+                },
+                method: "post",
+                data: formData
+              };
+              return [4
+              /*yield*/
+              , (0, doHTTP_1.doHTTP)(args)];
+
+            case 2:
+              uploadResponse = _a.sent();
+              if (!(uploadResponse.status == 200)) return [3
+              /*break*/
+              , 4];
+              return [4
+              /*yield*/
+              , populateForm()];
+
+            case 3:
+              _a.sent();
+
+              _a.label = 4;
+
+            case 4:
+              return [3
+              /*break*/
+              , 6];
+
+            case 5:
+              e_1 = _a.sent();
+              notiflix_1.Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
+              return [3
+              /*break*/
+              , 6];
+
+            case 6:
+              notiflix_1.Loading.remove();
+              return [3
+              /*break*/
+              , 8];
+
+            case 7:
+              notiflix_1.Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
+              _a.label = 8;
+
+            case 8:
+              return [2
+              /*return*/
+              ];
+          }
         });
       });
     };
@@ -17588,6 +17611,7 @@ exports["default"] = (0, vue_1.defineComponent)({
 
               if ((0, lodash_1.isEmpty)(title.value)) {
                 dirtySaved.value = true;
+                notiflix_1.Notify.failure("Le nom du produit est requis");
                 return [2
                 /*return*/
                 ];
@@ -17616,6 +17640,9 @@ exports["default"] = (0, vue_1.defineComponent)({
             case 1:
               _a.trys.push([1, 3,, 4]);
 
+              notiflix_1.Loading.standard("Enregistrement...", {
+                clickToClose: false
+              });
               return [4
               /*yield*/
               , (0, doHTTP_1.doHTTP)(arg)];
@@ -17640,9 +17667,10 @@ exports["default"] = (0, vue_1.defineComponent)({
               , 4];
 
             case 4:
+              notiflix_1.Loading.remove();
               return [3
               /*break*/
-              , 9];
+              , 10];
 
             case 5:
               arg = {
@@ -17667,6 +17695,9 @@ exports["default"] = (0, vue_1.defineComponent)({
             case 6:
               _a.trys.push([6, 8,, 9]);
 
+              notiflix_1.Loading.standard("Enregistrement...", {
+                clickToClose: false
+              });
               return [4
               /*yield*/
               , (0, doHTTP_1.doHTTP)(arg)];
@@ -17682,27 +17713,32 @@ exports["default"] = (0, vue_1.defineComponent)({
 
             case 8:
               e_4 = _a.sent();
+              notiflix_1.Notify.failure("Une erreur s'est produite pendant l'neregistrement");
               error = true;
               return [3
               /*break*/
               , 9];
 
             case 9:
+              notiflix_1.Loading.remove();
+              _a.label = 10;
+
+            case 10:
               if (!!error) return [3
               /*break*/
-              , 11]; // Update image
+              , 12]; // Update image
 
               return [4
               /*yield*/
               , updateCombination()];
 
-            case 10:
+            case 11:
               // Update image
               _a.sent();
 
-              _a.label = 11;
+              _a.label = 12;
 
-            case 11:
+            case 12:
               return [2
               /*return*/
               ];
@@ -19069,85 +19105,98 @@ var _hoisted_41 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
 );
 
 var _hoisted_42 = {
-  "class": "mb-3"
+  "class": "row"
+};
+var _hoisted_43 = {
+  "class": "mb-3 col-6"
 };
 
-var _hoisted_43 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+var _hoisted_44 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
   "class": "mb-2"
 }, "Prix", -1
 /* HOISTED */
 );
 
-var _hoisted_44 = {
+var _hoisted_45 = {
+  "class": "mb-3 col-6"
+};
+
+var _hoisted_46 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+  "class": "mb-2"
+}, "Quantité", -1
+/* HOISTED */
+);
+
+var _hoisted_47 = {
   "class": "mb-3"
 };
 
-var _hoisted_45 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
+var _hoisted_48 = /*#__PURE__*/(0, vue_1.createElementVNode)("h5", {
   "class": "mb-2"
 }, "Categories", -1
 /* HOISTED */
 );
 
-var _hoisted_46 = {
+var _hoisted_49 = {
   "class": "tab-pane",
   id: "des-b1"
 };
-var _hoisted_47 = {
+var _hoisted_50 = {
   "class": "row"
 };
-var _hoisted_48 = {
+var _hoisted_51 = {
   "class": "col-md-8"
 };
-var _hoisted_49 = {
+var _hoisted_52 = {
   "class": "table table-hover table-centered mb-0"
 };
 
-var _hoisted_50 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Prix", -1
+var _hoisted_53 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Prix", -1
 /* HOISTED */
 );
 
-var _hoisted_51 = ["onUpdate:modelValue"];
+var _hoisted_54 = ["onUpdate:modelValue"];
 
-var _hoisted_52 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Quantité", -1
+var _hoisted_55 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Quantité", -1
 /* HOISTED */
 );
 
-var _hoisted_53 = ["onUpdate:modelValue"];
+var _hoisted_56 = ["onUpdate:modelValue"];
 
-var _hoisted_54 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Reference", -1
+var _hoisted_57 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", null, "Reference", -1
 /* HOISTED */
 );
 
-var _hoisted_55 = ["onUpdate:modelValue"];
-var _hoisted_56 = ["value", "checked"];
-var _hoisted_57 = ["onClick"];
+var _hoisted_58 = ["onUpdate:modelValue"];
+var _hoisted_59 = ["value", "checked"];
+var _hoisted_60 = ["onClick"];
 
-var _hoisted_58 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
+var _hoisted_61 = /*#__PURE__*/(0, vue_1.createElementVNode)("i", {
   "class": "mdi mdi-trash-can"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_59 = [_hoisted_58];
-var _hoisted_60 = {
+var _hoisted_62 = [_hoisted_61];
+var _hoisted_63 = {
   "class": "col-md-4"
 };
-var _hoisted_61 = {
+var _hoisted_64 = {
   "class": "position-absolute"
 };
-var _hoisted_62 = {
+var _hoisted_65 = {
   "class": "form-check form-switch"
 };
-var _hoisted_63 = ["checked"];
+var _hoisted_66 = ["checked"];
 
-var _hoisted_64 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
+var _hoisted_67 = /*#__PURE__*/(0, vue_1.createElementVNode)("label", {
   "class": "form-check-label",
   "for": "customSwitch1"
 }, "Active", -1
 /* HOISTED */
 );
 
-var _hoisted_65 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
+var _hoisted_68 = /*#__PURE__*/(0, vue_1.createElementVNode)("button", {
   "class": "btn btn-success",
   type: "submit"
 }, "Enregistrer", -1
@@ -19174,7 +19223,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })])]), (0, vue_1.createElementVNode)("form", {
-    onSubmit: _cache[14] || (_cache[14] = (0, vue_1.withModifiers)( //@ts-ignore
+    onSubmit: _cache[15] || (_cache[15] = (0, vue_1.withModifiers)( //@ts-ignore
     function () {
       var args = [];
 
@@ -19295,7 +19344,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "form-control"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.reference]])])]), (0, vue_1.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  ), [[vue_1.vModelText, _ctx.reference]])])]), (0, vue_1.createElementVNode)("div", _hoisted_42, [(0, vue_1.createElementVNode)("div", _hoisted_43, [_hoisted_44, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "number",
     "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
       return _ctx.price = $event;
@@ -19303,7 +19352,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "form-control"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_44, [_hoisted_45, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
+  ), [[vue_1.vModelText, _ctx.price]])])]), (0, vue_1.createElementVNode)("div", _hoisted_45, [_hoisted_46, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    type: "number",
+    "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
+      return _ctx.quantity = $event;
+    }),
+    onInput: function onInput($event) {
+      return 1;
+    },
+    "class": "form-control"
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
+  ), [[vue_1.vModelText, _ctx.quantity]])])])]), (0, vue_1.createElementVNode)("div", _hoisted_47, [_hoisted_48, (0, vue_1.createElementVNode)("div", null, [(0, vue_1.createVNode)(_component_v_select, {
     taggable: "",
     multiple: "",
     options: _ctx.categories,
@@ -19312,17 +19372,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return ctg.id_category;
     },
     modelValue: _ctx.category,
-    "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
+    "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
       return _ctx.category = $event;
     })
   }, null, 8
   /* PROPS */
-  , ["options", "reduce", "modelValue"])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_46, [(0, vue_1.createElementVNode)("div", null, [(0, vue_1.createElementVNode)("div", _hoisted_47, [(0, vue_1.createElementVNode)("div", _hoisted_48, [(0, vue_1.createElementVNode)("table", _hoisted_49, [(0, vue_1.createElementVNode)("tbody", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.combinations, function (combination, index) {
+  , ["options", "reduce", "modelValue"])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_49, [(0, vue_1.createElementVNode)("div", null, [(0, vue_1.createElementVNode)("div", _hoisted_50, [(0, vue_1.createElementVNode)("div", _hoisted_51, [(0, vue_1.createElementVNode)("table", _hoisted_52, [(0, vue_1.createElementVNode)("tbody", null, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.combinations, function (combination, index) {
     return (0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("tr", null, [(0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.id), 1
     /* TEXT */
     ), (0, vue_1.createElementVNode)("td", null, (0, vue_1.toDisplayString)(combination.name), 1
     /* TEXT */
-    ), (0, vue_1.createElementVNode)("td", null, [_hoisted_50, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    ), (0, vue_1.createElementVNode)("td", null, [_hoisted_53, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].price = $event;
@@ -19330,7 +19390,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_51), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_52, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    , _hoisted_54), [[vue_1.vModelText, _ctx.combinations[index].price]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_55, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return _ctx.combinations[index].quantity = $event;
@@ -19338,7 +19398,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_53), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_54, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    , _hoisted_56), [[vue_1.vModelText, _ctx.combinations[index].quantity]])]), (0, vue_1.createElementVNode)("td", null, [_hoisted_57, (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "text",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return combination.reference = $event;
@@ -19346,9 +19406,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-control"
     }, null, 8
     /* PROPS */
-    , _hoisted_55), [[vue_1.vModelText, combination.reference]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+    , _hoisted_58), [[vue_1.vModelText, combination.reference]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
       type: "radio",
-      "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
+      "onUpdate:modelValue": _cache[12] || (_cache[12] = function ($event) {
         return _ctx.combination_default_on = $event;
       }),
       value: combination.id,
@@ -19357,17 +19417,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "form-check-input"
     }, null, 8
     /* PROPS */
-    , _hoisted_56), [[vue_1.vModelRadio, _ctx.combination_default_on]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("span", {
+    , _hoisted_59), [[vue_1.vModelRadio, _ctx.combination_default_on]])]), (0, vue_1.createElementVNode)("td", null, [(0, vue_1.createElementVNode)("span", {
       "class": "action-icon",
       onClick: function onClick($event) {
         return _ctx.deleteCombination(combination.id);
       }
-    }, _hoisted_59, 8
+    }, _hoisted_62, 8
     /* PROPS */
-    , _hoisted_57)])]);
+    , _hoisted_60)])]);
   }), 256
   /* UNKEYED_FRAGMENT */
-  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_60, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
+  ))])])]), (0, vue_1.createElementVNode)("div", _hoisted_63, [((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)(_ctx.attributeGroups, function (g) {
     return (0, vue_1.openBlock)(), (0, vue_1.createBlock)(_component_attribute_combination_group, {
       group: g,
       onUpdateAttr: _ctx.pushCombination
@@ -19378,7 +19438,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* UNKEYED_FRAGMENT */
   )), (0, vue_1.createElementVNode)("button", {
     "class": "btn btn-success",
-    onClick: _cache[12] || (_cache[12] = //@ts-ignore
+    onClick: _cache[13] || (_cache[13] = //@ts-ignore
     function () {
       var args = [];
 
@@ -19389,9 +19449,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return _ctx.generateCombination && _ctx.generateCombination.apply(_ctx, args);
     }),
     type: "button"
-  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_61, [(0, vue_1.createElementVNode)("div", _hoisted_62, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
+  }, "Generer")])])])])])])]), (0, vue_1.createElementVNode)("div", _hoisted_64, [(0, vue_1.createElementVNode)("div", _hoisted_65, [(0, vue_1.withDirectives)((0, vue_1.createElementVNode)("input", {
     type: "checkbox",
-    "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
+    "onUpdate:modelValue": _cache[14] || (_cache[14] = function ($event) {
       return _ctx.active = $event;
     }),
     checked: _ctx.active,
@@ -19399,7 +19459,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "customSwitch1"
   }, null, 8
   /* PROPS */
-  , _hoisted_63), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_64]), _hoisted_65])], 32
+  , _hoisted_66), [[vue_1.vModelCheckbox, _ctx.active]]), _hoisted_67]), _hoisted_68])], 32
   /* HYDRATE_EVENTS */
   )]);
 }
@@ -19877,7 +19937,16 @@ exports.doHTTP = doHTTP;
 /*!**********************************!*\
   !*** ./resources/js/ladygasy.ts ***!
   \**********************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var lodash_1 = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 $(function () {
   $('.dropdown-toggle').dropdown();
@@ -19887,6 +19956,33 @@ $(function () {
     $('#nav').toggleClass("change");
     $('#menu-bg').toggleClass("change-bg");
     $('body').toggleClass("menu-open");
+  });
+  $('#single-product-quantity').on('change', function (e) {
+    var quantity = $(e.currentTarget).val();
+    var unitPrice = $('input#single-unit-price').val();
+
+    if ((0, lodash_1.isString)(quantity) && (0, lodash_1.isString)(unitPrice)) {
+      $('#single-product-price').text(parseInt(quantity) * parseInt(unitPrice));
+    }
+  });
+  $('.single-product-attribute').on('change', function (ev) {
+    var option = $(ev.currentTarget).children(':selected');
+    var price = option.data('price');
+    var quantityMax = option.data('quantity');
+    var inputQuantity = $("#single-product-quantity").val();
+    price = parseInt(price);
+    quantityMax = parseInt(quantityMax); // vérification de quantité
+
+    if ((0, lodash_1.isString)(inputQuantity)) {
+      inputQuantity = parseInt(inputQuantity); // Mettreà jour le prix
+
+      $('#single-unit-price').val(price);
+      $('#single-product-price').text(inputQuantity * price);
+
+      if (inputQuantity > quantityMax) {
+        $("#single-product-quantity").val(quantityMax);
+      }
+    }
   });
 });
 

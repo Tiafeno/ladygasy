@@ -35,11 +35,11 @@
 
                   <div class="mb-3">
                     <div class="text-title mb-2">Récapitulatif</div>
-                    <QuillEditor ref="quillRecap" v-model:content="recap" content-type="html" theme="snow" />
+                    <QuillEditor ref="quillRecap" v-model:content="recap" content-type="html" theme="snow"/>
                   </div>
                   <div class="mb-3">
                     <div class="text-title mb-2">Description</div>
-                    <QuillEditor ref="quillDesc" v-model:content="description" content-type="html" theme="snow" />
+                    <QuillEditor ref="quillDesc" v-model:content="description" content-type="html" theme="snow"/>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -94,12 +94,21 @@
                       <input type="text" v-model="reference" class="form-control">
                     </div>
                   </div>
-                  <div class="mb-3">
-                    <h5 class="mb-2">Prix</h5>
-                    <div>
-                      <input type="number" v-model="price" class="form-control">
+                  <div class="row">
+                    <div class="mb-3 col-6">
+                      <h5 class="mb-2">Prix</h5>
+                      <div>
+                        <input type="number" v-model="price" class="form-control">
+                      </div>
+                    </div>
+                    <div class="mb-3 col-6">
+                      <h5 class="mb-2">Quantité</h5>
+                      <div>
+                        <input type="number" v-model="quantity" @input="1" class="form-control">
+                      </div>
                     </div>
                   </div>
+
                   <div class="mb-3">
                     <h5 class="mb-2">Categories</h5>
                     <div>
@@ -108,7 +117,6 @@
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
             <div class="tab-pane" id="des-b1">
@@ -118,20 +126,20 @@
                     <table class="table table-hover table-centered mb-0">
                       <tbody>
                       <tr v-for="(combination, index) in combinations">
-                        <td>{{combination.id}}</td>
-                        <td>{{combination.name}}</td>
+                        <td>{{ combination.id }}</td>
+                        <td>{{ combination.name }}</td>
 
                         <td>
                           <label>Prix</label>
-                          <input type="number" v-model="combinations[index].price" class="form-control" >
+                          <input type="number" v-model="combinations[index].price" class="form-control">
                         </td>
                         <td>
                           <label>Quantité</label>
-                          <input type="number" v-model="combinations[index].quantity" class="form-control" >
+                          <input type="number" v-model="combinations[index].quantity" class="form-control">
                         </td>
                         <td>
                           <label>Reference</label>
-                          <input type="text" v-model="combination.reference" class="form-control" >
+                          <input type="text" v-model="combination.reference" class="form-control">
                         </td>
                         <td>
                           <input type="radio"
@@ -139,10 +147,11 @@
                                  :value="combination.id"
                                  :checked="combination_default_on === combination.id"
                                  name="default"
-                                 class="form-check-input" >
+                                 class="form-check-input">
                         </td>
                         <td>
-                          <span class="action-icon" @click="deleteCombination(combination.id)"><i class="mdi mdi-trash-can"></i></span>
+                          <span class="action-icon" @click="deleteCombination(combination.id)"><i
+                              class="mdi mdi-trash-can"></i></span>
                         </td>
                       </tr>
                       </tbody>
@@ -168,8 +177,6 @@
         <button class="btn btn-success" type="submit">Enregistrer</button>
       </div>
     </form>
-
-
   </div>
 </template>
 
@@ -216,7 +223,7 @@ export default defineComponent({
     const price = ref(0);
     const image = ref('');
     const imageUrl = ref('');
-    const combination_default_on =ref(0);
+    const combination_default_on = ref(0);
     const quantity = ref(1);
     const categories = ref([]); // Tous les categories disponible
     const category = ref([]); // Categorie du produit
@@ -278,51 +285,56 @@ export default defineComponent({
           async () => {
 
           },
-          {
-          },
+          {},
       );
     }
     const loadFile = async (event) => {
-      Confirm.show(
-          'Confirmation',
-          'Voulez vous remplacé l\'ancienne image par celui-ci ?',
-          'Oui',
-          'Non',
-          async () => {
-            file.value = event.target.files[0];
-            if (ID.value) {
-              const formData = new FormData();
-              formData.append('file', file.value);
-              Loading.standard("Loading...", {
-                clickToClose: false
-              });
-              try {
-                const args: AxiosRequestConfig = {
-                  url: route('update.image.product', {id_product: ID.value}),
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                  method: "post",
-                  data: formData
-                };
-                const uploadResponse = await doHTTP(args);
-                if (uploadResponse.status == 200) {
-                  await populateForm();
-                }
-              } catch (e) {
-                Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
-              }
-              Loading.remove();
-            } else {
-              Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
-            }
-          },
-          () => {
+      if (file.value) {
+        Confirm.show(
+            'Confirmation',
+            'Voulez vous remplacé l\'ancienne image par celui-ci ?',
+            'Oui',
+            'Non',
+            () => {
+              file.value = event.target.files[0];
+              uploadImage();
+            },
+            () => {
 
-          },
-          {
-          },
-      );
+            },
+            {},
+        );
+      } else {
+        await uploadImage();
+      }
+    }
+    const uploadImage = async () => {
+      if (ID.value) {
+        const formData = new FormData();
+        formData.append('file', file.value);
+        Loading.standard("Loading...", {
+          clickToClose: false
+        });
+        try {
+          const args: AxiosRequestConfig = {
+            url: route('update.image.product', {id_product: ID.value}),
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            method: "post",
+            data: formData
+          };
+          const uploadResponse = await doHTTP(args);
+          if (uploadResponse.status == 200) {
+            await populateForm();
+          }
+        } catch (e) {
+          Notify.failure("Une erreur s'est produite pendant l'enregistrement de l'image");
+        }
+        Loading.remove();
+      } else {
+        Notify.failure("Veuillez enregistrer le produit avant d'ajouter une image");
+      }
     }
     const triggerUploadInput = () => {
       document.getElementById('product-image').click();
@@ -344,7 +356,8 @@ export default defineComponent({
               combination_default_on.value = default_combination.id;
             }
           }
-        } catch (e) {}
+        } catch (e) {
+        }
       }
     };
     const pushCombination = (attr: Attribute, type: string) => {
@@ -356,7 +369,7 @@ export default defineComponent({
         });
       }
     };
-    const populateForm = async() => {
+    const populateForm = async () => {
       if (ID.value) {
         Loading.standard("Chargement...", {
           clickToClose: false
@@ -388,6 +401,7 @@ export default defineComponent({
       let error = false;
       if (isEmpty(title.value)) {
         dirtySaved.value = true;
+        Notify.failure("Le nom du produit est requis");
         return;
       }
       if (!ID.value) {
@@ -407,6 +421,9 @@ export default defineComponent({
           }
         };
         try {
+          Loading.standard("Enregistrement...", {
+            clickToClose: false
+          });
           const response = await doHTTP(arg);
           if (response.status === 200) {
             isSaved.value = true;
@@ -415,6 +432,7 @@ export default defineComponent({
         } catch (e) {
           error = true;
         }
+        Loading.remove();
       } else {
         // update
         const arg: AxiosRequestConfig = {
@@ -433,20 +451,25 @@ export default defineComponent({
           }
         };
         try {
+          Loading.standard("Enregistrement...", {
+            clickToClose: false
+          });
           const response = await doHTTP(arg);
           if (response.status === 200) {
 
           }
         } catch (e) {
-            error = true;
+          Notify.failure("Une erreur s'est produite pendant l'neregistrement");
+          error = true;
         }
+        Loading.remove();
       }
       if (!error) {
         // Update image
         await updateCombination();
       }
     }
-    const updateCombination = async() => {
+    const updateCombination = async () => {
       if (ID.value && !isEmpty(combinations.value)) {
         const promiseCall = [];
         Loading.standard("Chargement...", {
@@ -489,9 +512,9 @@ export default defineComponent({
               await fetchCombination();
             }
           },
-          async () => {},
-          {
+          async () => {
           },
+          {},
       );
     }
     const generateCombination = async () => {

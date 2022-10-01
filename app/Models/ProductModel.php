@@ -96,6 +96,7 @@ class ProductModel extends Model
 						->first();
 				if ($attribute) {
 					return [
+							'product_attribute_id' => $result->id_product_attribute,
 							'attribute_id' => $attribute->id_attribute,
 							'name' => $attribute->name,
 							'price' => $result->price,
@@ -104,13 +105,29 @@ class ProductModel extends Model
 				}
 			}
 		}
-
 		return [
+				'product_attribute_id' => 0,
 				'attribute_id' => 0,
 				'name' => '',
 				'price' => $this->price,
 				'quantity' => $this->quantity
 		];
+	}
+
+	public function getPrice($id_product_attribute = 0) {
+		if ($this->type == "simple") return $this->price;
+		if ($id_product_attribute) {
+			$attribute = DB::table('product_attribute')
+					->where('id_product_attribute', intval($id_product_attribute))
+					->first();
+			if ($attribute) {
+				return $attribute->price;
+			}
+		} else {
+			$default = $this->getDefaultAttribute();
+			return $default['price'];
+		}
+		return 0;
 	}
 
 	public function removeCategory($id_category)
@@ -124,13 +141,16 @@ class ProductModel extends Model
 		if ($category_join) $category_join->delete();
 	}
 
-	public function getImage(): ?string
+
+	public function getImage($size = "large"): ?string
 	{
 		$image_name = $this->image;
-		if ($image_name) {
-			return Storage::disk('local')->url('product/' . $image_name);
-		}
-		return null;
+    $disk = Storage::disk('local');
+		if ($image_name && !$size == "original") {
+			return $disk->url('product/thumbnail/'.$size.'-' . $image_name);
+		} else {
+      return $disk->url('product/'. $image_name);
+    }
 	}
 
 }

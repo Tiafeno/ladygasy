@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerModel extends Model
 {
@@ -29,4 +30,12 @@ class CustomerModel extends Model
       if ($user) return $user;
       return null;
     }
+
+	public static function getContext(): ?static {
+		$current_user = Auth::user();
+		if (!$current_user) return null;
+		$customer = static::query()->where('id_user', '=', Auth::id())->first();
+		if ($customer) return $customer;
+		return null;
+	}
 }

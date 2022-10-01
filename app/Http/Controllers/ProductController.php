@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductAttribute;
 use App\Models\ProductModel;
 use App\Traits\ProductManager;
 use Illuminate\Http\Request;
@@ -45,11 +46,31 @@ class ProductController extends Controller
    * Display the specified resource.
    *
    * @param int $id
-   * @return \Illuminate\Http\Response
    */
-  public function show($id)
+  public function show(Request $request, $id)
   {
-    //
+    $id_attribute = (int)$request->get('attribute', 0);
+    $quantity_default = 0;
+    $attributes = [];
+    $product = ProductModel::query()->find(intval($id));
+    if ($product->type == "combination") {
+      $attributes = ProductAttribute::query()->where('id_product', '=', (int)$product->id_product)->get();
+      if ($id_attribute) {
+        $attr = $attributes->first(fn($a) => $a->id_product_attribute == $id_attribute);
+        if ($attr) {
+          $quantity_default = $attr->quantity;
+        }
+      }
+
+    }
+
+		return view('pages.product-single', [
+      'product' => $product,
+      'attributes' => $attributes,
+      'id_attribute' => $id_attribute,
+      'price' => $product->getPrice(),
+      'quantity' => $quantity_default
+    ]);
   }
 
   /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\CustomerModel;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -105,5 +106,17 @@ class RegisterController extends Controller
       'email' => $user->email,
       'id_user' => (int)$user->id_user
     ]);
+
+		// modifier le panier
+		if (session()->has('lg_cart')) {
+			$key_secure = session()->get('lg_cart');
+			$cart = Cart::query()
+					->where('secure_key', '=', $key_secure)
+					->first();
+			$cart->update([
+					'id_customer' => $customer->id_customer,
+				'id_guest' => 0
+			]);
+		}
   }
 }

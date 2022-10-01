@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);
+@import url(https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800&display=swap);
 @charset "UTF-8";
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
@@ -59,7 +59,7 @@
 .bar {
   height: 3px;
   width: 100%;
-  background-color: #DC052D;
+  background-color: black;
   display: block;
   border-radius: 5px;
   transition: 0.3s ease;
@@ -72,9 +72,14 @@
 }
 
 .nav_ a {
-  color: white;
+  color: black;
   background: none;
   border: none;
+}
+
+.nav_ a:hover {
+  color: black;
+  cursor: pointer;
 }
 
 .nav_ a:hover {
@@ -89,7 +94,7 @@
   z-index: 1;
   width: 0;
   height: 0;
-  background: radial-gradient(circle, #DC052D, #DC052D);
+  background: #ffb122;
   transition: 0.3s ease;
   border-radius: 0px 0px 50em 0px;
 }
@@ -99,7 +104,7 @@
 }
 
 .change .bar {
-  background-color: white;
+  background-color: black;
 }
 
 .change #bar1 {
@@ -121,6 +126,57 @@
 
 .menu-open {
   overflow-y: hidden;
+}
+
+.product-single-title {
+  font-size: 3.3823529412vw;
+  color: black;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5073529412vw;
+  text-align: center;
+  padding-bottom: 4.9264705882vw;
+}
+
+.product__price--item {
+  letter-spacing: 0.2117647059vw;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: black;
+}
+
+.product__add-to-cart {
+  font-size: 0.8823529412vw;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1058823529vw;
+  color: #000;
+  text-decoration: none;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  padding-bottom: 0.3676470588vw;
+  border-bottom: 2px solid;
+}
+
+.lg-btn {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1058823529vw;
+  text-decoration: none;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  padding-bottom: 0.3676470588vw;
+  border-bottom: 2px solid;
 }
 
 /*!
@@ -173,7 +229,7 @@
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 33, 37, 41;
   --bs-body-bg-rgb: 248, 250, 252;
-  --bs-font-sans-serif: "Nunito", sans-serif;
+  --bs-font-sans-serif: "Exo 2", sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);

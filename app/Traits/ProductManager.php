@@ -125,6 +125,11 @@ trait ProductManager
 			})->resizeCanvas(800, 800, 'center', false, 'ffffff')
 					->save($destinationPath.'/large-'.$image_name);
 
+			$img->resize(720, 1280, function($contraint) {
+				$contraint->aspectRatio();
+			})->resizeCanvas(720, 1280, 'center', false, 'ffffff')
+					->save($destinationPath.'/single-'.$image_name);
+
 			$img->resize(480, 480, function($contraint) {
 				$contraint->aspectRatio();
 			})->resizeCanvas(480, 480, 'center', false, 'ffffff')

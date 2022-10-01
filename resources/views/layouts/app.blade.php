@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+{{--<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">--}}
 
 <head>
     <meta charset="utf-8">
@@ -9,14 +9,14 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- App css -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('hyper/css/app.css') }}" rel="stylesheet" type="text/css" />
-    <!--<link href="{{ asset('hyper/css/app-creative.min.css') }}" rel="stylesheet" type="text/css" id="light-style" /> -->
-    <link href="{{ asset('hyper/css/app-creative-dark.css') }}" rel="stylesheet" type="text/css" id="dark-style" />
+    <!-- <link href="{{ asset('hyper/css/app-creative.min.css') }}" rel="stylesheet" type="text/css" id="light-style" /> -->
+    <link href="{{ asset('hyper/css/app-creative.css') }}" rel="stylesheet" type="text/css" id="dark-style" />
 </head>
 
 <body data-layout-color="light" data-leftbar-theme="light" data-layout-mode="fluid" data-rightbar-onstart="true">
@@ -28,13 +28,7 @@
             <div id="header__top">
                 <x-menu-primary></x-menu-primary>
             </div>
-            <div id="header__slider">
-                <div class="slide_title text-center" style="padding-top: 25vh">
-                    <h1 class=" header">ANTICELLULITE COMPLEX</h1>
-                    <h4>Try our perfect anti-cellulite complex with a hot body wrap for soft and healthy skin !</h4>
-                </div>
-
-            </div>
+            @yield('slider')
             <main class="py-4">
                 @yield('content')
             </main>
