@@ -21,10 +21,9 @@
                 </div>
                 <nav class="nav_ mt-4" id="nav">
                     <div class="list-group d-flex">
-                        <a class="list-group-item flex-column">Home</a>
-                        <a class="list-group-item flex-column">About</a>
+                        <a class="list-group-item flex-column">Accueil</a>
+                        <a class="list-group-item flex-column" href="{{route('index.category', ['slug' => 'huile-de-risain'])}}">Huille de risain</a>
                         <a class="list-group-item flex-column">Contact</a>
-                        <a class="list-group-item flex-column">Blog</a>
                         @auth()
                             <a class="list-group-item flex-column"
                                 onclick="event.preventDefault(); document.querySelector('#logout-form').submit();">

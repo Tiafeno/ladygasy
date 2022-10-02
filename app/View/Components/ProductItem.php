@@ -27,7 +27,6 @@ class ProductItem extends Component
 					}
 					$this->default_attribute = (object)$this->product->getDefaultAttribute();
 				} catch (ModelNotFoundException $e) {
-					dd($e);
 				}
     }
 

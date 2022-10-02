@@ -23,12 +23,6 @@
             @endif
 
             <div class="row">
-                <div class="col-md-4">
-                    <x-product-item product-id="1"></x-product-item>
-                </div>
-                <div class="col-md-4">
-                    <x-product-item product-id="3"></x-product-item>
-                </div>
             </div>
         </div>
     </div>
