@@ -109,7 +109,7 @@ export default defineComponent({
       // Valider les données
       const data = form.value;
       console.log(data);
-      if (isEmpty(data.name) || !isNumber(data.id_group)) return;
+      if (isEmpty(data.name) || !data.id_group) return;
       const configRequest: AxiosRequestConfig = {
         url: route('store.attribute'),
         method: 'post',

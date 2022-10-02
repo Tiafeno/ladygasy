@@ -84,7 +84,7 @@ class AdminAttributeController extends Controller
     }
 
     $attribute = AttributeModel::create([
-      'id_group' => $request->id_group,
+      'id_group' => (int)$request->id_group,
       'name' => trim($request->name)
     ]);
     return response(['message' => "Attribut ajouter avec succès"], 200);

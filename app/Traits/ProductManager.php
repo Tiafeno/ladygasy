@@ -104,7 +104,7 @@ trait ProductManager
 
 	public function update_image_product(Request $request, $id_product) {
 		$validator = Validator::make($request->all(), [
-				"file" => 'required|image|mimes:jpg,jpeg,png,gif,svg|max:3048',
+				"file" => 'required|mimes:jpg,jpeg,png,gif,svg|max:3048',
 		]);
 		if ($validator->fails()) {
 			return response(['message' => $validator->getMessageBag()->first()], 401);
