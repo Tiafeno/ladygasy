@@ -1,4 +1,4 @@
-<div class="product">
+<div class="product mb-4">
     <form method="post" class="form-product-item" action="{{route('update.cart')}}">
         @csrf
         <a href="{{$url}}" class="d-inline-block">

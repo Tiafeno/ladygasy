@@ -310,7 +310,6 @@ export default defineComponent({
       }
     }
     const uploadImage = async () => {
-
       if (ID.value) {
         const formData = new FormData();
         formData.append('file', file.value);

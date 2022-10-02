@@ -22,7 +22,8 @@
                 </div>
             @endif
 
-            <div class="row">
+            <div class="row mt-4">
+            <x-product-slider :categories="[1, 2, 3]"></x-product-slider>
             </div>
         </div>
     </div>
