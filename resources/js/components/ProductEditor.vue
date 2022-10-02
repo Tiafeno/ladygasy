@@ -305,10 +305,12 @@ export default defineComponent({
             {},
         );
       } else {
+        file.value = event.target.files[0];
         await uploadImage();
       }
     }
     const uploadImage = async () => {
+
       if (ID.value) {
         const formData = new FormData();
         formData.append('file', file.value);
