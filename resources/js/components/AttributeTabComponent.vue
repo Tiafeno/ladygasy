@@ -108,6 +108,7 @@ export default defineComponent({
     const onSubmitAttribute = async () => {
       // Valider les données
       const data = form.value;
+      console.log(data);
       if (isEmpty(data.name) || !isNumber(data.id_group)) return;
       const configRequest: AxiosRequestConfig = {
         url: route('store.attribute'),
