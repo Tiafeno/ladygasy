@@ -2,31 +2,18 @@
 
 @section('content')
     <div class="container mt-lg-5 mt-5">
-        <!-- start page title -->
         <div class="row">
             <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{route('index.checkout')}}">Informations d'expédition</a></li>
-                            <li class="breadcrumb-item active">Checkout</li>
-                        </ol>
-                    </div>
-                    <h4 class="page-title">Checkout</h4>
-                </div>
-            </div>
-        </div>
-        <!-- end page title -->
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
+                <div class="card shadow-none">
                     <div class="card-body">
+                        <div>
+                            <h3 class="mt-0 text-center product-single-title">Information de paiement </h3>
+                        </div>
 
                         <!-- Checkout Steps -->
                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                             <li class="nav-item">
-                                <a href="#shipping-information" class="nav-link rounded-0 ">
+                                <a href="{{route('index.checkout')}}" class="nav-link rounded-0 ">
                                     <span class="d-block">Expédition</span>
                                 </a>
                             </li>

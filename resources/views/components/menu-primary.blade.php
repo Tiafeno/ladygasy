@@ -21,7 +21,7 @@
                 </div>
                 <nav class="nav_ mt-4" id="nav">
                     <div class="list-group d-flex">
-                        <a class="list-group-item flex-column">Accueil</a>
+                        <a href="{{route('home')}}" class="list-group-item flex-column">Accueil</a>
                         <a class="list-group-item flex-column" href="{{route('index.category', ['slug' => 'huile-de-risain'])}}">Huille de risain</a>
                         <a class="list-group-item flex-column">Contact</a>
                         @auth()
@@ -38,13 +38,11 @@
         </li>
         <li class="nav-item">
             <a href="{{ route('home') }}" title="Lady Gasy">
-                <img width="75" src="{{ asset('images/logo.png') }}">
+                <img width="125" class="rounded" src="{{ asset('images/logo.png') }}">
             </a>
         </li>
-        <li class="nav-item header-top-end" >
+        <li class="nav-item header-top-end mini-cart">
             <x-cart-mini-component></x-cart-mini-component>
-
-
         </li>
       </ul>
 </div>

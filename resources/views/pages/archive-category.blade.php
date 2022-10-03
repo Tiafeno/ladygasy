@@ -3,7 +3,7 @@
     <div class="container mt-lg-5 mt-5">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card shadow-none">
                     <div class="card-body">
                         <div>
                             <h3 class="mt-0 text-center product-single-title">{{ $category->name }} </h3>

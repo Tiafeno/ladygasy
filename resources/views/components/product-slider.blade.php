@@ -9,7 +9,7 @@ margin: 0 auto;
         <li class="nav-item">
         <a href="#{{$item['slug']}}-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link @if($index == 0) active @endif text-uppercase">
             <i class="mdi mdi-account-circle d-md-none d-block"></i>
-            <span class="d-none d-md-block">{{$item['name']}}</span>
+            <span class=" d-md-block">{{$item['name']}}</span>
         </a>
     </li>
     @endforeach

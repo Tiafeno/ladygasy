@@ -1,24 +1,14 @@
 @extends('layouts.app')
-
+@section('title', 'Vérification de commande')
 @section('content')
     <div class="container mt-lg-5 mt-5">
-        <!-- start page title -->
         <div class="row">
             <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-
-                    </div>
-                    <h4 class="page-title">Vérification de commande</h4>
-                </div>
-            </div>
-        </div>
-        <!-- end page title -->
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card shadow-none">
+                    <div class="card-body ">
+                        <div>
+                            <h3 class="mt-0 text-center product-single-title">Vérification de commande </h3>
+                        </div>
 
                         <!-- Checkout Steps -->
                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
@@ -31,7 +21,7 @@
                             <li class="nav-item">
                                 <a href="#payment-information" class="nav-link rounded-0">
                                     <i class="mdi mdi-cash-multiple font-18"></i>
-                                    <span class="d-block">Information de paiement</span>
+                                    <span class="d-block">Paiement</span>
                                 </a>
                             </li>
                         </ul>
