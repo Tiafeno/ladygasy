@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', $category->name)
 @section('content')
     <div class="container mt-lg-5 mt-5">
         <div class="row">

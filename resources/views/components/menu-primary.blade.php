@@ -41,7 +41,7 @@
                 <img width="125" class="rounded" src="{{ asset('images/logo.png') }}">
             </a>
         </li>
-        <li class="nav-item header-top-end mini-cart">
+        <li class="nav-item header-top-end mini-cart d-flex">
             <x-cart-mini-component></x-cart-mini-component>
         </li>
       </ul>

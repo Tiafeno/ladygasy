@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/contact', [App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
 
 Route::get('/products/{id}-{slug}.html', [ProductController::class, 'show'])->name('show.product');
 Route::get('/categories/{slug}', [CategoryController::class, 'index'])->name('index.category');
@@ -40,7 +41,7 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::get('checkout/shipping-information', [CheckoutController::class, 'shipping'])->name('shipping.checkout');
 	Route::get('checkout/payment', [CheckoutController::class, 'payment'])->name('payment.checkout');
 	Route::post('checkout/order', [CheckoutController::class, 'confirm_checkout'])->name('confirm.checkout');
-	Route::get('order/confirm', [CheckoutController::class, 'confirm_order'])->name('confirm.order');
+	Route::get('order/{idc}/confirm', [CheckoutController::class, 'confirm_order'])->name('confirm.order');
 });
 
 Route::redirect('ld-admin/', 'ld-admin/dashboard');

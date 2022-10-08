@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', "Shopping et vente au détail")
 @section('slider')
     <div id="header__slider">
         <div class="slide_title text-center" style="padding-top: 25vh">

@@ -9,8 +9,10 @@ use App\Models\CustomerModel;
 use App\Models\Options;
 use App\Models\OrderDetails;
 use App\Models\Orders;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -31,6 +33,9 @@ class CheckoutController extends Controller
 		}
 		$cart = Cart::getContext();
 		$items = $cart->getItems();
+		if (empty($items)) {
+			return redirect()->route('page.cart');
+		}
 
 		$total = collect($items)->reduce(function ($i, $item) {
 			return $i + ((int)$item['price'] * $item['quantity']);
@@ -54,7 +59,36 @@ class CheckoutController extends Controller
 
 	}
 
-	public function confirm_checkout(Request $request) {
+	public static function status() {
+		return [
+				[
+						'code' => 1,
+						'name' => "Nouveau"
+				],[
+						'code' => 2,
+						'name' => "En attente de validation"
+				],[
+						'code' => 3,
+						'name' => "Validée "
+				],[
+						'code' => 4,
+						'name' => "En préparation"
+				],[
+						'code' => 5,
+						'name' => "Expédiée"
+				],[
+						'code' => 6,
+						'name' => "Livrée"
+				],
+				[
+						'code' => 7,
+						'name' => "Annulée"
+				],
+		];
+	}
+
+	public function confirm_checkout(Request $request)
+	{
 		$validator = Validator::make($request->all(), [
 				'paymentOption' => 'required'
 		]);
@@ -65,7 +99,7 @@ class CheckoutController extends Controller
 		$cart = Cart::getContext();
 		$customer = CustomerModel::getContext();
 		if (!$customer || !$cart) {
-			return back()->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
+			return redirect()->route('page.cart')->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
 		}
 		$items = $cart->getItems();
 		if (session()->has('billing_address')) {
@@ -75,23 +109,23 @@ class CheckoutController extends Controller
 			$address_billing = CustomerBilling::query()
 					->where('id_customer', '=', $customer->id_customer)
 					->first();
-			if ($address_billing)  {
+			if ($address_billing) {
 				$address_shipping_id = $address_billing->id_billing;
 			}
 		}
 
 		$shipping_number = Options::query()->where('name', '=', 'SHIPPING_NUMBER')->first();
-		$order  = Orders::create([
+		$order = Orders::create([
 				'id_customer' => $customer->id_customer,
-			'id_billing' => (int)$address_shipping_id,
-			'id_cart' => $cart->id_cart,
-			'reference' => Str::uuid()->toString(),
-			'payment' => $request->get('paymentOption'),
-			'total_paid' => $cart->getTotal(),
-			'active' => 1,
-			'shipping_number' => (int)$shipping_number->value,
-			'total_products' => count($items),
-			'delivery_cost' => 0
+				'id_billing' => (int)$address_shipping_id,
+				'id_cart' => $cart->id_cart,
+				'reference' => Str::uuid()->toString(),
+				'payment' => $request->get('paymentOption'),
+				'total_paid' => $cart->getTotal(),
+				'active' => 1,
+				'shipping_number' => (int)$shipping_number->value,
+				'total_products' => count($items),
+				'delivery_cost' => 0
 		]);
 
 		// Add order details
@@ -99,11 +133,11 @@ class CheckoutController extends Controller
 		foreach ($items as $item) {
 			$order_detail = OrderDetails::create([
 					'id_order' => $order->id_order,
-				'product_quantity' => $item['quantity'],
-				'product_name' => $item['product_name'],
-				'product_price' => $item['price'],
-				'product_reference' => $item['reference'],
-				'attribute_name' => $item['name']
+					'product_quantity' => $item['quantity'],
+					'product_name' => $item['product_name'],
+					'product_price' => $item['price'],
+					'product_reference' => $item['reference'],
+					'attribute_name' => $item['name']
 			]);
 		}
 
@@ -126,11 +160,50 @@ class CheckoutController extends Controller
 		if (session()->has('lg_cart')) {
 			session()->remove('lg_cart');
 		}
-		return redirect()->to(route('confirm.order'));
+		return redirect()->to(route('confirm.order', ['idc', Crypt::encryptString((string)$order->id_order)]));
 	}
 
-	public function confirm_order() {
-		return view('pages.confirmation-order');
+	public function confirm_order($idc)
+	{
+		$items = [];
+		list($id, $status, $date_created, $payment_method) = [0, "Nouveau", "", "", ""];
+		try {
+			$id_order = Crypt::decryptString($idc);
+			$order = Orders::query()->find(intval($id_order));
+			if ($order) {
+				$id = $order->id_order;
+				$date_created = (new \DateTime($order->created_at))->format(' \l\e d F Y \à H \h i');
+				$order_details = OrderDetails::query()->where('id_order', '=', $order->id_order)->get();
+				if ($order->payment == "delivery") {
+					$payment_method = "Paiement à la livraison";
+				} else {
+					$payment_method = $order->payment;
+				}
+				// Status
+				$status = collect(static::status())->first(function($st) use ($order) {
+						return $st['code'] == $order->status;
+				});
+				if ($status) $status = $status['name'];
+				foreach ($order_details as $item) {
+					$items[] = [
+							'name' => $item->product_name,
+							'quantity' => $item->product_quantity,
+							'total' => intval($item->product_quantity * $item->product_price)
+					];
+				}
+			}
+		} catch (DecryptException $e) {
+		}
+		$total = collect($items)->sum(fn($item) => $item['total'] ?? 0);
+		return view('pages.confirmation-order', [
+				'items' => $items,
+				'total' => $total,
+				'payment' => $payment_method,
+				'date' => $date_created,
+				'id' => $id,
+			'status' => $status
+		]);
+
 	}
 
 
@@ -138,7 +211,9 @@ class CheckoutController extends Controller
 	{
 		$cart = Cart::getContext();
 		$items = $cart->getItems();
-
+		if (empty($items)) {
+			return redirect()->route('page.cart');
+		}
 		$total = collect($items)->reduce(function ($i, $item) {
 			return $i + ((int)$item['price'] * $item['quantity']);
 		}, 0);

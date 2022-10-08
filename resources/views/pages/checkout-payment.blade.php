@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Information de paiement')
 @section('content')
     <div class="container mt-lg-5 mt-5">
         <div class="row">
@@ -7,7 +7,7 @@
                 <div class="card shadow-none">
                     <div class="card-body">
                         <div>
-                            <h3 class="mt-0 text-center product-single-title">Information de paiement </h3>
+                            <h3 class="mt-0 text-center product-single-title">Information de paiement</h3>
                         </div>
 
                         <!-- Checkout Steps -->

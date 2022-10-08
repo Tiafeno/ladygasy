@@ -4,7 +4,7 @@
     <div class="container mt-lg-5 mt-5">
         <div class="row">
             <div class="col-12">
-                <div class="card shadow-none">
+                <div class="card shadow-none mt-5">
                     <div class="card-body ">
                         <div>
                             <h3 class="mt-0 text-center product-single-title">Vérification de commande </h3>

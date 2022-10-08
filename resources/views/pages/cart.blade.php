@@ -4,7 +4,7 @@
     <div class="container mt-lg-5 mt-5">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card mt-5">
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
@@ -46,7 +46,7 @@
                                                 <td>
                                                     @if($item['image'])
                                                     <img src="{{route('image', ['size' => 'cart', 'image' => $item['image']])}}" alt="contact-img"
-                                                         title="contact-img" class="rounded me-3" height="64" />
+                                                         title="contact-img" class="rounded me-3" height="40" />
                                                     @endif
                                                     <p class="m-0 d-inline-block align-middle font-16">
                                                         <a target="_blank" href="{{App\Services\ProductHandler::getProductUrl($item['id_product'], $item['id_attribute'])}}"

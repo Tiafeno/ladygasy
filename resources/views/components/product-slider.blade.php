@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs nav-bordered mb-3" style="
+<div class="mb-5" style="
 margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -6,15 +6,14 @@ margin: 0 auto;
     align-content: center;
     justify-content: center;">
     @foreach ($data as $index => $item)
-        <li class="nav-item">
-        <a href="#{{$item['slug']}}-b2" data-bs-toggle="tab" aria-expanded="true" class="nav-link @if($index == 0) active @endif text-uppercase">
+        <a href="#{{$item['slug']}}-b2" data-bs-toggle="tab" aria-expanded="true"
+           class="btn btn-outline-primary me-2 @if($index == 0) active @endif text-uppercase">
             <i class="mdi mdi-account-circle d-md-none d-block"></i>
             <span class=" d-md-block">{{$item['name']}}</span>
         </a>
-    </li>
     @endforeach
 
-</ul>
+</div>
 
 <div class="tab-content">
     @foreach ($data as $index => $item)
@@ -27,7 +26,7 @@ margin: 0 auto;
         @endforeach
         </div>
         <div class="row justify-content-center">
-          <a href="{{$item['url']}}" class="btn lg-btn">Voir +</a>
+          <a href="{{$item['url']}}" style="width: inherit" class="btn lg-btn d-block">Voir +</a>
         </div>
       </div>
     @endforeach

@@ -179,3 +179,9 @@
 .mini-cart .dropdown-menu {
   min-width: 20rem !important;
 }
+.btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+  color: #fff;
+  background-color: #ffa33f !important;
+  border-color: #ffa33f !important;
+}
+

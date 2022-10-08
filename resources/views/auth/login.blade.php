@@ -4,11 +4,11 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-xxl-4 col-lg-5">
-        <div class="card">
+        <div class="card  border-secondary border">
           <!-- Logo -->
-          <div class="card-header pt-4 pb-4 text-center">
-            <span><img src="{{ asset('images/logo.png') }}" alt="" height="80"></span>
-          </div>
+          <h4 class="card-title pt-4 text-center">
+            Se connecter
+          </h4>
           <div class="card-body p-4">
             <form method="POST" action="{{ route('login') }}">
               @csrf
@@ -28,8 +28,8 @@
               </div>
 
               <div class=" mb-3">
-                <a href="{{ route('password.request') }}" class="text-muted float-end">
-                  <small>Mot de passe oublier ?</small></a>
+                <!-- <a href="{{ route('password.request') }}" class="text-muted float-end">
+                  <small>Mot de passe oublier ?</small></a> -->
                 <label for="password" class="form-label">{{ __('Mot de passe') }}</label>
                 <input id="password" type="password"
                        class="form-control @error('password') is-invalid @enderror" name="password" required
@@ -44,7 +44,7 @@
 
               <div class="row mb-0">
                 <div class="col-md-12 text-center">
-                  <button type="submit" class="btn btn-warning text-white">
+                  <button type="submit" class="btn btn-primary text-white">
                     {{ __('Se connecter') }}
                   </button>
                 </div>

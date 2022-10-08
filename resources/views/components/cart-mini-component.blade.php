@@ -1,5 +1,5 @@
 
-<div class="dropdown" >
+<div class="dropdown mt-1" >
     <a class="arrow-none dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" aria-haspopup="true"
        aria-expanded="false">
         @if(!empty($items))
@@ -43,7 +43,7 @@
             @if(!empty($items))
             <div class="text-center mb-3">
                 <div class="row d-flex justify-content-between">
-                    <div class="col-8 font-15">
+                    <div class="col-12 font-15">
                         <small >SOUS-TOTAL : </small><small class="fw-semibold  ms-3">{{$total}} MGA</small>
                     </div>
                 </div>

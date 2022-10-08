@@ -4,11 +4,8 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-xxl-8 col-lg-6">
-        <div class="card">
+        <div class="card pt-4 pb-4 ">
           <!-- Logo -->
-          <div class="card-header pt-4 pb-4 text-center">
-            <span><img src="{{ asset('images/logo.png') }}" alt="" height="80"></span>
-          </div>
           <div class="card-body p-4">
             <div class="text-center w-75 m-auto">
               <h4 class="text-dark-50 text-center mt-0 fw-bold">Inscription gratuit</h4>
@@ -102,7 +99,7 @@
 
               <div class="row mb-0">
                 <div class="col-md-6 ">
-                  <button type="submit" class="btn btn-warning text-white">
+                  <button type="submit" class="btn btn-primary text-white">
                     {{ __('S\'enregistrer') }}
                   </button>
                 </div>

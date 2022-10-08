@@ -2,9 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800&display=swap');
 // Variables
 @import 'variables';
-@import 'ladygasy';
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import 'ladygasy';
 body {
   font-size: 13px;
+}
+.btn-primary:hover {
+  background-color: #ffa33f !important;
+  border-color: #ffa33f !important;
+}
+
+.btn-primary {
+  background-color:  #ffa33f !important;
+  border-color:  #ffa33f !important;
 }
