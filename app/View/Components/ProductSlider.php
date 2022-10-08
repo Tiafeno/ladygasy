@@ -24,9 +24,13 @@ class ProductSlider extends Component
           ->get();
         $this->data = $categories_query->map(function($cat) {
           $product_cat = DB::table('product_has_category')
-            ->where('id_category', '=', $cat->id_category)
+							->join('product' ,function($join) {
+								$join->on('product_has_category.id_product', '=', 'product.id_product')
+										->where('product.active', '=', 1);
+							})
+            ->where('product_has_category.id_category', '=', $cat->id_category)
             ->take(50)
-            ->get(['id_product']);
+            ->get(['product_has_category.id_product']);
           $products = $product_cat->map(function($join) {
             return $join->id_product;
           });

@@ -17,15 +17,9 @@
           </a>
         </li>
         <li class="side-nav-item">
-          <a href="" class="side-nav-link">
+          <a href="{{route('index.admin.orders')}}" class="side-nav-link">
             <i class="uil-calender"></i>
             <span> Commandes </span>
-          </a>
-        </li>
-        <li class="side-nav-item">
-          <a href="" class="side-nav-link">
-            <i class="uil-calender"></i>
-            <span> Panier </span>
           </a>
         </li>
 
@@ -52,57 +46,6 @@
           </a>
         </li>
 
-        <li class="side-nav-item">
-          <a href="" class="side-nav-link">
-            <i class="uil-calender"></i>
-            <span> Articles </span>
-          </a>
-        </li>
-
-        <li class="side-nav-item">
-          <a href="{{route('index.admin.zone')}}" class="side-nav-link">
-            <i class="uil-calender"></i>
-            <span> Zone </span>
-          </a>
-        </li>
-
-
-
-        <li class="side-nav-item">
-          <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
-            <i class="uil-store"></i>
-            <span> Ecommerce </span>
-            <span class="menu-arrow"></span>
-          </a>
-          <div class="collapse" id="sidebarEcommerce">
-            <ul class="side-nav-second-level">
-              <li>
-                <a href="apps-ecommerce-products.html">Products</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-products-details.html">Products Details</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-orders.html">Orders</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-orders-details.html">Order Details</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-customers.html">Customers</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-shopping-cart.html">Shopping Cart</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-checkout.html">Checkout</a>
-              </li>
-              <li>
-                <a href="apps-ecommerce-sellers.html">Sellers</a>
-              </li>
-            </ul>
-          </div>
-        </li>
       </ul>
 
       <!-- End Sidebar -->

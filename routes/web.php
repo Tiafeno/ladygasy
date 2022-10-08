@@ -46,6 +46,10 @@ Route::group([ 'middleware' => ['auth']], function () {
 
 Route::redirect('ld-admin/', 'ld-admin/dashboard');
 Route::group(['prefix' => 'ld-admin', 'middleware' => ['auth', 'is.admin']], function () {
+  Route::get('orders', [AdminController::class, 'index_order_admin'])->name('index.admin.orders');
+  Route::get('orders/{id_order}', [AdminController::class, 'show_order_admin'])->name('show.admin.order');
+  Route::patch('orders/{id_order}', [AdminController::class, 'update_order'])->name('update.admin.order');
+  Route::get('cards', [AdminController::class, 'index_cards_admin'])->name('index.admin.cards');
   Route::get('products', [AdminController::class, 'index_product_admin'])->name('index.admin.product');
   Route::post('products', [AdminController::class, 'store_product_admin'])->name('store.admin.product');
   Route::get('product/{id_product}', [AdminController::class, 'fetch'])->name('product');

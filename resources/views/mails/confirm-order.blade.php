@@ -8,7 +8,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
-    <title>freezone</title><!--[if (mso 16)]>
+    <title>Ladygasy</title><!--[if (mso 16)]>
     <style type="text/css">
     a {
         text-decoration: none;
@@ -403,15 +403,7 @@
                                                             <td align="center"
                                                                 style="padding:0;Margin:0;padding-bottom:10px"><h2
                                                                         style="Margin:0;line-height:36px;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;font-size:30px;font-style:normal;font-weight:bold;color:#333333">
-                                                                    Thank You For Your Order!</h2></td>
-                                                        </tr>
-                                                        <tr style="border-collapse:collapse">
-                                                            <td align="left"
-                                                                style="padding:0;Margin:0;padding-top:15px;padding-bottom:20px">
-                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#777777;font-size:16px">
-                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing
-                                                                    elit. Praesentium iste ipsa numquam odio dolores,
-                                                                    nam.</p></td>
+                                                                    Merci pour votre commande !</h2></td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -453,7 +445,7 @@
                                                                                 Confirmation de commande</h4></td>
                                                                         <td width="20%" style="padding:0;Margin:0"><h4
                                                                                     style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">
-                                                                                2345678</h4></td>
+                                                                                {{$id}}</h4></td>
                                                                     </tr>
                                                                 </table>
                                                             </td>
@@ -480,19 +472,21 @@
                                                                        class="cke_show_border" cellspacing="1"
                                                                        cellpadding="1" border="0" align="left"
                                                                        role="presentation">
-
+                                                                    @foreach($items as $item)
                                                                     <tr style="border-collapse:collapse">
                                                                         <td style="padding:5px 10px 5px 0;Margin:0"
                                                                             width="80%" align="left"><p
                                                                                     style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
-                                                                                Shipping + Handling</p></td>
+                                                                                {{$item['product_name']}}</p><small>{{$item['attribute_name']}}</small></td>
                                                                         <td style="padding:0;Margin:0"><br></td>
                                                                         <td style="padding:5px 0;Margin:0" width="20%"
                                                                             align="left"><p
                                                                                     style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
-                                                                                $10.00</p></td>
+                                                                                {{$item['product_price'] * $item['product_quantity']}} MGA</p></td>
                                                                         <td style="padding:0;Margin:0"><br></td>
                                                                     </tr>
+                                                                    @endforeach
+
                                                                 </table>
                                                             </td>
                                                         </tr>
@@ -525,7 +519,7 @@
                                                                                 TOTAL</h4></td>
                                                                         <td width="20%" style="padding:0;Margin:0"><h4
                                                                                     style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">
-                                                                                $115.00</h4></td>
+                                                                                {{$total}} MGA</h4></td>
                                                                     </tr>
                                                                 </table>
                                                             </td>
@@ -557,16 +551,23 @@
                                                                         style="Margin:0;line-height:120%;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif">
                                                                     Adresse de livraison</h4></td>
                                                         </tr>
+                                                        @if(!empty($address))
                                                         <tr style="border-collapse:collapse">
                                                             <td align="left"
-                                                                style="padding:0;Margin:0;padding-bottom:10px"><p
+                                                                style="padding:0;Margin:0;padding-bottom:10px">
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
+                                                                    {{$address['first_name']}} {{$address['last_name']}}</p>
+
+                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
+                                                                    {{$address['phone']}}</p>
+                                                                <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
-                                                                    675 Massachusetts Avenue</p>
+                                                                    {{$address['address']}}</p>
+
                                                                 <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
-                                                                    11th Floor</p>
-                                                                <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:24px;color:#333333;font-size:16px">
-                                                                    Cambridge, MA 02139</p></td>
+                                                                    {{$address['city']}}, {{$address['zipcode']}}</p></td>
                                                         </tr>
+                                                        @endif
                                                     </table>
                                                 </td>
                                             </tr>

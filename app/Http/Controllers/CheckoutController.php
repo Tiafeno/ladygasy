@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use function Sodium\randombytes_random16;
 
 class CheckoutController extends Controller
 {
@@ -59,34 +58,6 @@ class CheckoutController extends Controller
 
 	}
 
-	public static function status() {
-		return [
-				[
-						'code' => 1,
-						'name' => "Nouveau"
-				],[
-						'code' => 2,
-						'name' => "En attente de validation"
-				],[
-						'code' => 3,
-						'name' => "Validée "
-				],[
-						'code' => 4,
-						'name' => "En préparation"
-				],[
-						'code' => 5,
-						'name' => "Expédiée"
-				],[
-						'code' => 6,
-						'name' => "Livrée"
-				],
-				[
-						'code' => 7,
-						'name' => "Annulée"
-				],
-		];
-	}
-
 	public function confirm_checkout(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
@@ -99,7 +70,8 @@ class CheckoutController extends Controller
 		$cart = Cart::getContext();
 		$customer = CustomerModel::getContext();
 		if (!$customer || !$cart) {
-			return redirect()->route('page.cart')->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
+			return redirect()->to(route('page.cart'))
+					->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
 		}
 		$items = $cart->getItems();
 		if (session()->has('billing_address')) {
@@ -146,9 +118,11 @@ class CheckoutController extends Controller
 		]);
 
 		// Envoyer un mail à l'administrateur
-		$admin_notif = "tiafenofnel@gmail.com";
+		$customer_mail = !$customer->email ? "cedricabezandry@gmail.com" : $customer->email;
 		try {
-			Mail::to($admin_notif)->send(new ConfirmOrder($order));
+			Mail::to($customer_mail)
+					->bcc("cedricabezandry@gmail.com", "Cedrica Marie")
+					->send(new ConfirmOrder($order));
 		} catch (\Swift_TransportException $e) {
 			Log::critical($e->getMessage());
 		}
@@ -160,7 +134,7 @@ class CheckoutController extends Controller
 		if (session()->has('lg_cart')) {
 			session()->remove('lg_cart');
 		}
-		return redirect()->to(route('confirm.order', ['idc', Crypt::encryptString((string)$order->id_order)]));
+		return redirect()->to(route('confirm.order', ['idc' => Crypt::encryptString((string)$order->id_order)]));
 	}
 
 	public function confirm_order($idc)
@@ -180,7 +154,7 @@ class CheckoutController extends Controller
 					$payment_method = $order->payment;
 				}
 				// Status
-				$status = collect(static::status())->first(function($st) use ($order) {
+				$status = collect(Orders::status())->first(function($st) use ($order) {
 						return $st['code'] == $order->status;
 				});
 				if ($status) $status = $status['name'];
