@@ -15,12 +15,11 @@ class ProductSlider extends Component
      *
      * @return void
      */
-    public function __construct($categories = [])
+    public function __construct()
     {
         // Recuperer les 6 premiers categories qui posséde plus de produit
         $categories_query = Category::query()
           ->where('active', 1)
-          ->whereIn('id_category', $categories)
           ->get();
         $this->data = $categories_query->map(function($cat) {
           $product_cat = DB::table('product_has_category')
