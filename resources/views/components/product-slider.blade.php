@@ -1,4 +1,4 @@
-<div class="mb-5" style="
+<div class="mb-5 nav " style="
 margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -15,7 +15,7 @@ margin: 0 auto;
 
 </div>
 
-<div class="tab-content">
+<div class="tab-content" style="min-height: 70vh">
     @foreach ($data as $index => $item)
       <div class="tab-pane @if($index == 0) show active @endif" id="{{$item['slug']}}-b2">
         <div class="row">
