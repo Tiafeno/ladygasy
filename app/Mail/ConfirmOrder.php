@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Crypt;
 
 class ConfirmOrder extends Mailable
 {
@@ -19,6 +20,7 @@ class ConfirmOrder extends Mailable
 	public $items = [];
 	public $id_order = 0;
 	public $total = 0;
+	public $order_link = "";
 
 	/**
 	 * Create a new message instance.
@@ -36,6 +38,7 @@ class ConfirmOrder extends Mailable
 			$order_details = OrderDetails::query()->where('id_order', '=', $order->id_order)->get();
 			$this->items = $order_details->map(fn($k) => $k->toArray())->toArray();
 			$this->total = collect($this->items)->sum(fn($i) => $i['product_price'] * $i['product_quantity']);
+			$this->order_link = route('confirm.order', ['idc' => Crypt::encryptString((string)$this->id_order)]);
 		}
 	}
 
@@ -52,7 +55,8 @@ class ConfirmOrder extends Mailable
 						'items' => $this->items,
 						'address' => $this->address,
 						'total' => $this->total,
-						'id' => $this->id_order
+						'id' => $this->id_order,
+					'order_link' => $this->order_link
 				]);
 	}
 }

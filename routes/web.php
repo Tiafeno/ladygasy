@@ -33,6 +33,7 @@ Route::post('cart', [CartController::class, 'update'])->name('update.cart');
 Route::post('form-cart', [CartController::class, 'form_update_cart'])->name('form.update.cart');
 Route::get('cart', [CartController::class, 'cart_page'])->name('page.cart');
 Route::get('cart/item/{id_item}/remove', [CartController::class, 'remove_item'])->name('cart.remove.item');
+Route::get('order/{idc}/confirm', [CheckoutController::class, 'confirm_order'])->name('confirm.order');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('customer/address-shipping', [CustomerController::class, 'shippingAddress'])->name('create.shipping.customer');
@@ -41,7 +42,6 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::get('checkout/shipping-information', [CheckoutController::class, 'shipping'])->name('shipping.checkout');
 	Route::get('checkout/payment', [CheckoutController::class, 'payment'])->name('payment.checkout');
 	Route::post('checkout/order', [CheckoutController::class, 'confirm_checkout'])->name('confirm.checkout');
-	Route::get('order/{idc}/confirm', [CheckoutController::class, 'confirm_order'])->name('confirm.order');
 });
 
 Route::redirect('ld-admin/', 'ld-admin/dashboard');

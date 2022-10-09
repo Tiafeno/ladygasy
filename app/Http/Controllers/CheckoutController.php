@@ -166,7 +166,8 @@ class CheckoutController extends Controller
 					];
 				}
 			}
-		} catch (DecryptException $e) {
+		} catch (DecryptException | \Exception$e) {
+			return back()->with('error', $e->getMessage());
 		}
 		$total = collect($items)->sum(fn($item) => $item['total'] ?? 0);
 		return view('pages.confirmation-order', [
