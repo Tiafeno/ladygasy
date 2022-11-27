@@ -2,9 +2,9 @@
   <div>
     <div class="row mb-2">
       <div class="col-sm-5">
-        <router-link to="/" class="btn btn-danger mb-2">
+        <RouterLink to="/" class="btn btn-danger mb-2">
           <i class="mdi mdi-backspace me-2"></i> Retour
-        </router-link>
+        </RouterLink>
       </div>
     </div>
     <form @submit.prevent="submitProduct">

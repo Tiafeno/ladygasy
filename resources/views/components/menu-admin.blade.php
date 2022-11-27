@@ -23,6 +23,13 @@
           </a>
         </li>
 
+         <li class="side-nav-item">
+          <a href="{{route('customers.index')}}" class="side-nav-link">
+            <i class="uil-calender"></i>
+            <span> Clients </span>
+          </a>
+        </li>
+
         <li class="side-nav-title side-nav-item">Catalogue</li>
 
         <li class="side-nav-item">

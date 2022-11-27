@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CustomerModel extends Model
 {
     use HasFactory;
+    protected ?Model $user = null;
     protected $table = 'customer';
     protected $primaryKey = "id_customer";
     protected $fillable = [
@@ -26,8 +27,9 @@ class CustomerModel extends Model
     ];
 
     public function getUser(): ?Model {
-      $user = User::query()->find($this->id_user);
-      if ($user) return $user;
+      if ($this->user instanceof Model) return $this->user;
+      $this->user = User::query()->find($this->id_user);
+      if ($this->user) return $this->user;
       return null;
     }
 

@@ -51,17 +51,22 @@
 
     </div>
 
+  @auth()
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    @endauth
     <!-- Footer Start -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-6">
-            <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+            <script>document.write(new Date().getFullYear())</script> © Tiafeno Finel
           </div>
           <div class="col-md-6">
             <div class="text-md-end footer-links d-none d-md-block">
-              <a href="javascript: void(0);">Voir le site</a>
-              <a href="javascript: void(0);">Se deconnecter</a>
+              <a href="{{route('home')}}" target="_blank">Voir le site</a>
+              <a href="javascript: void(0);"   onclick="event.preventDefault(); document.querySelector('#logout-form').submit();">Se deconnecter</a>
             </div>
           </div>
         </div>

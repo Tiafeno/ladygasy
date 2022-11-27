@@ -17,7 +17,10 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return 'ok';
+      $customers = CustomerModel::query()->get();
+      return view("admin.customers", [
+        'customers' => $customers
+      ]);
     }
 
     /**
