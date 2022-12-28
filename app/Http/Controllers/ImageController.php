@@ -14,9 +14,9 @@ class ImageController extends Controller
 	{
 		try {
 			if ($size == 'original' || !$size) {
-				$path = Storage::disk('local')->path("public/product/{$image}");
+				$path = Storage::disk('local')->get("public/product/{$image}");
 			} else {
-				$path = Storage::disk('local')->path("public/product/thumbnail/{$size}-{$image}");
+				$path = Storage::disk('local')->get("public/product/thumbnail/{$size}-{$image}");
 			}
 
 			$file = File::get($path);
@@ -25,7 +25,7 @@ class ImageController extends Controller
 				echo $file;
 			}, 200, ["Content-Type"=> $type]);
 			return $response;
-		} catch (FileNotFoundException $e) {
+		} catch (\Exception $e) {
 			return null;
 		}
 
