@@ -1,19 +1,15 @@
-<div class="mb-5 nav " style="
-margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: center;">
+<ul class="mb-3 nav justify-content-center nav-tabs nav-bordered">
     @foreach ($data as $index => $item)
+      <li class="nav-item">
         <a href="#{{$item['slug']}}-b2" data-bs-toggle="tab" aria-expanded="true"
-           class="btn btn-outline-primary me-2 @if($index == 0) active @endif text-uppercase">
+           class="btn text-dark font-20 me-2 @if($index == 0) active @endif text-uppercase">
             <i class="mdi mdi-account-circle d-md-none d-block"></i>
             <span class=" d-md-block">{{$item['name']}}</span>
         </a>
+      </li>
     @endforeach
 
-</div>
+</ul>
 
 <div class="tab-content" style="min-height: 70vh">
     @foreach ($data as $index => $item)

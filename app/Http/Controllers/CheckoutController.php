@@ -40,9 +40,9 @@ class CheckoutController extends Controller
 			return $i + ((int)$item['price'] * $item['quantity']);
 		}, 0);
 		return view('pages.checkout', [
-				'billings' => $customer_billings,
-				'items' => $items,
-				'total' => $total
+			'billings' => $customer_billings,
+			'items' => $items,
+			'total' => $total
 		]);
 	}
 
@@ -55,13 +55,12 @@ class CheckoutController extends Controller
 
 	public function shipping()
 	{
-
 	}
 
 	public function confirm_checkout(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
-				'paymentOption' => 'required'
+			'paymentOption' => 'required'
 		]);
 		if ($validator->fails()) {
 			return back()->with('error', $validator->getMessageBag()->first());
@@ -71,7 +70,7 @@ class CheckoutController extends Controller
 		$customer = CustomerModel::getContext();
 		if (!$customer || !$cart) {
 			return redirect()->to(route('page.cart'))
-					->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
+				->with('error', "Une erreur s'est produite pendant l'envoie de votre commande");
 		}
 		$items = $cart->getItems();
 		if (session()->has('billing_address')) {
@@ -79,8 +78,8 @@ class CheckoutController extends Controller
 		} else {
 			// Recuperer l'addres par default
 			$address_billing = CustomerBilling::query()
-					->where('id_customer', '=', $customer->id_customer)
-					->first();
+				->where('id_customer', '=', $customer->id_customer)
+				->first();
 			if ($address_billing) {
 				$address_shipping_id = $address_billing->id_billing;
 			}
@@ -88,48 +87,48 @@ class CheckoutController extends Controller
 
 		$shipping_number = Options::query()->where('name', '=', 'SHIPPING_NUMBER')->first();
 		$order = Orders::create([
-				'id_customer' => $customer->id_customer,
-				'id_billing' => (int)$address_shipping_id,
-				'id_cart' => $cart->id_cart,
-				'reference' => Str::uuid()->toString(),
-				'payment' => $request->get('paymentOption'),
-				'total_paid' => $cart->getTotal(),
-				'active' => 1,
-				'shipping_number' => (int)$shipping_number->value,
-				'total_products' => count($items),
-				'delivery_cost' => 0
+			'id_customer' => $customer->id_customer,
+			'id_billing' => (int)$address_shipping_id,
+			'id_cart' => $cart->id_cart,
+			'reference' => Str::uuid()->toString(),
+			'payment' => $request->get('paymentOption'),
+			'total_paid' => $cart->getTotal(),
+			'active' => 1,
+			'shipping_number' => (int)$shipping_number->value,
+			'total_products' => count($items),
+			'delivery_cost' => 0
 		]);
 
 		// Add order details
 
 		foreach ($items as $item) {
 			$order_detail = OrderDetails::create([
-					'id_order' => $order->id_order,
-					'product_quantity' => $item['quantity'],
-					'product_name' => $item['product_name'],
-					'product_price' => $item['price'],
-					'product_reference' => $item['reference'],
-					'attribute_name' => $item['name']
+				'id_order' => $order->id_order,
+				'product_quantity' => $item['quantity'],
+				'product_name' => $item['product_name'],
+				'product_price' => $item['price'],
+				'product_reference' => $item['reference'],
+				'attribute_name' => $item['name']
 			]);
 		}
 
 		$shipping_number->update([
-				'value' => (string)(intval($shipping_number->value) + 1)
+			'value' => (string)(intval($shipping_number->value) + 1)
 		]);
 
 		// Envoyer un mail à l'administrateur
 		$customer_mail = !$customer->email ? "cedricabezandry@gmail.com" : $customer->email;
 		try {
 			Mail::to($customer_mail)
-					->bcc("cedricabezandry@gmail.com", "Cedrica Marie")
-					->send(new ConfirmOrder($order));
+				->bcc("cedricabezandry@gmail.com", "Cedrica Marie")
+				->send(new ConfirmOrder($order));
 		} catch (\Swift_TransportException $e) {
 			Log::critical($e->getMessage());
 		}
 
 		// supprimer le panier
 		$cart->update([
-				'active' => 0
+			'active' => 0
 		]);
 		if (session()->has('lg_cart')) {
 			session()->remove('lg_cart');
@@ -154,31 +153,30 @@ class CheckoutController extends Controller
 					$payment_method = $order->payment;
 				}
 				// Status
-				$status = collect(Orders::status())->first(function($st) use ($order) {
-						return $st['code'] == $order->status;
+				$status = collect(Orders::status())->first(function ($st) use ($order) {
+					return $st['code'] == $order->status;
 				});
 				if ($status) $status = $status['name'];
 				foreach ($order_details as $item) {
 					$items[] = [
-							'name' => $item->product_name,
-							'quantity' => $item->product_quantity,
-							'total' => intval($item->product_quantity * $item->product_price)
+						'name' => $item->product_name,
+						'quantity' => $item->product_quantity,
+						'total' => intval($item->product_quantity * $item->product_price)
 					];
 				}
 			}
-		} catch (DecryptException | \Exception$e) {
+		} catch (DecryptException | \Exception $e) {
 			return back()->with('error', $e->getMessage());
 		}
-		$total = collect($items)->sum(fn($item) => $item['total'] ?? 0);
+		$total = collect($items)->sum(fn ($item) => $item['total'] ?? 0);
 		return view('pages.confirmation-order', [
-				'items' => $items,
-				'total' => $total,
-				'payment' => $payment_method,
-				'date' => $date_created,
-				'id' => $id,
+			'items' => $items,
+			'total' => $total,
+			'payment' => $payment_method,
+			'date' => $date_created,
+			'id' => $id,
 			'status' => $status
 		]);
-
 	}
 
 
@@ -193,8 +191,8 @@ class CheckoutController extends Controller
 			return $i + ((int)$item['price'] * $item['quantity']);
 		}, 0);
 		return view("pages.checkout-payment", [
-				'items' => $items,
-				'total' => $total
+			'items' => $items,
+			'total' => $total
 		]);
 	}
 }

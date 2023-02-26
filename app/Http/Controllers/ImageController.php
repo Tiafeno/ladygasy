@@ -14,20 +14,19 @@ class ImageController extends Controller
 	{
 		try {
 			if ($size == 'original' || !$size) {
-				$path = Storage::disk('local')->get("public/product/{$image}");
+				$path = Storage::disk('local')->path("public/product/{$image}");
 			} else {
-				$path = Storage::disk('local')->get("public/product/thumbnail/{$size}-{$image}");
+				$path = Storage::disk('local')->path("public/product/thumbnail/{$size}-{$image}");
 			}
 
 			$file = File::get($path);
 			$type = File::mimeType($path);
-			$response = Response::stream(function() use($file) {
+			$response = Response::stream(function () use ($file) {
 				echo $file;
-			}, 200, ["Content-Type"=> $type]);
+			}, 200, ["Content-Type" => $type]);
 			return $response;
 		} catch (\Exception $e) {
 			return null;
 		}
-
 	}
 }

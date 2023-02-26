@@ -12,14 +12,14 @@
                         <div class="row">
                             <div class="col-lg-5">
                                 <!-- Product image -->
-                                <a href="javascript: void(0);" class="text-center d-block mb-4">
-                                    <img src="{{ $product->getImage() }}" class="img-fluid" style="max-width: 280px;"
+                                <a target="_blank" href="{{route('image', ['size' => 'original', 'image' => $product->image])}}" class="text-center d-block mb-4">
+                                    <img src="{{route('image', ['size' => 'large', 'image' => $product->image])}}" class="img-fluid" style="max-width: 280px;"
                                          alt="Product-img">
                                 </a>
 
                                 <div class="d-lg-flex d-none justify-content-center">
                                     <a href="javascript: void(0);">
-                                        <img src="{{ $product->getImage('cart') }}" class="img-fluid img-thumbnail p-2"
+                                        <img src="{{route('image', ['size' => 'cart', 'image' => $product->image])}}" class="img-fluid img-thumbnail p-2"
                                              style="max-width: 75px;" alt="Product-img">
                                     </a>
                                 </div>

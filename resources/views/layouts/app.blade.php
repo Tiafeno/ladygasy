@@ -15,7 +15,7 @@
     <!-- App css -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('hyper/css/app.css') }}" rel="stylesheet" type="text/css" />
-    <!-- <link href="{{ asset('hyper/css/app-creative.min.css') }}" rel="stylesheet" type="text/css" id="light-style" /> -->
+    <link href="{{ asset('hyper/css/app-creative.min.css') }}" rel="stylesheet" type="text/css" id="light-style" /> 
     <link href="{{ asset('hyper/css/app-creative.css') }}" rel="stylesheet" type="text/css" id="dark-style" />
 </head>
 

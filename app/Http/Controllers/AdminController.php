@@ -15,20 +15,23 @@ class AdminController extends Controller
 {
   use ProductManager, OrderManager;
 
-  public function index() {
+  public function index()
+  {
     return view("admin.dashboard", []);
   }
 
-  public function employee_index() {
+  public function employee_index()
+  {
     $users = User::query()->where('group', "=", "admin")->get();
-
   }
 
-  public function employee_created(){
+  public function employee_created()
+  {
     return;
   }
 
-  public function employee_store(Request $request) {
+  public function employee_store(Request $request)
+  {
     $validator = Validator::make($request->all(), array(
       "phone" => "required",
       "password" => "required",
@@ -50,8 +53,7 @@ class AdminController extends Controller
         "group" => "admin",
         'password' => Hash::make($request->get('password')),
       ]);
-    } catch (NumberParseException $e) { }
-    
+    } catch (NumberParseException $e) {
+    }
   }
-
 }

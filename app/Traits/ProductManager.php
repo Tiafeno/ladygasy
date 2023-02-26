@@ -27,7 +27,7 @@ trait ProductManager
 		$product = ProductModel::query()->find(intval($id_product));
 		if ($product) {
 			$product->categories = $product->getCategories();
-			$product->image_url =  $product->image ? route('image', ['size'=> 'medium', 'image' => $product->image]) : '';
+			$product->image_url =  $product->image ? route('image', ['size' => 'medium', 'image' => $product->image]) : '';
 			return response($product);
 		}
 		return response(new \stdClass());
@@ -41,7 +41,7 @@ trait ProductManager
 		$response = $products->map(function ($product) use ($size) {
 			$product->price = floatval($product->price);
 			$product->categories = $product->getCategories();
-			$product->image_url = $product->image ? route('image', ['size'=> $size, 'image' => $product->image]) : '';
+			$product->image_url = $product->image ? route('image', ['size' => $size, 'image' => $product->image]) : '';
 			return $product;
 		});
 		return response($response->toArray());
@@ -52,23 +52,23 @@ trait ProductManager
 		$name = $request->get('name');
 		try {
 			$product = ProductModel::create([
-					'name' => $name,
-					'slug_name' => Str::slug($name),
-					'type' => $request->get('type', 'simple'),
-					'ean13' => $request->get('ean13'),
-					'quantity' => (int)$request->get('quantity'),
-					'minimal_quantity' => (int)$request->get('minimal_quantity'),
-					'reference' => (string)$request->get('reference'),
-					'description' => $request->get('description'),
-					'description_short' => $request->get('description_short'),
-					'price' => floatval($request->get('price', 0)),
-					'active' => $request->get('active', 0)
+				'name' => $name,
+				'slug_name' => Str::slug($name),
+				'type' => $request->get('type', 'simple'),
+				'ean13' => $request->get('ean13'),
+				'quantity' => (int)$request->get('quantity'),
+				'minimal_quantity' => (int)$request->get('minimal_quantity'),
+				'reference' => (string)$request->get('reference'),
+				'description' => $request->get('description'),
+				'description_short' => $request->get('description_short'),
+				'price' => floatval($request->get('price', 0)),
+				'active' => $request->get('active', 0)
 			]);
 
 			// Ajoteur les catégories
 			$categories = $request->get('categories', []);
 			if (is_array($categories) && !empty($categories)) {
-					$product->addCategories($categories);
+				$product->addCategories($categories);
 			}
 			return response(['id' => $product->id_product]);
 		} catch (\Exception $e) {
@@ -82,29 +82,30 @@ trait ProductManager
 		if ($product) {
 			$name = $request->get('name');
 			$product->update([
-					'name' => $name,
-					'slug_name' => Str::slug($name),
-					'type' => $request->get('type', 'simple'),
-					'ean13' => $request->get('ean13'),
-					'quantity' => (int)$request->get('quantity'),
-					'minimal_quantity' => (int)$request->get('minimal_quantity'),
-					'reference' => (string)$request->get('reference'),
-					'description' => $request->get('description'),
-					'description_short' => $request->get('description_short'),
-					'price' => floatval($request->get('price', 0)),
-					'active' => $request->get('active', 0)
+				'name' => $name,
+				'slug_name' => Str::slug($name),
+				'type' => $request->get('type', 'simple'),
+				'ean13' => $request->get('ean13'),
+				'quantity' => (int)$request->get('quantity'),
+				'minimal_quantity' => (int)$request->get('minimal_quantity'),
+				'reference' => (string)$request->get('reference'),
+				'description' => $request->get('description'),
+				'description_short' => $request->get('description_short'),
+				'price' => floatval($request->get('price', 0)),
+				'active' => $request->get('active') == true ? 1 : 0
 			]);
 			$categories = $request->get('categories', []);
 			if (is_array($categories) && !empty($categories)) {
-					$product->addCategories($categories);
+				$product->addCategories($categories);
 			}
 			return response(["message" => "Enregistrer avec succès"], 200);
 		}
 	}
 
-	public function update_image_product(Request $request, $id_product) {
+	public function update_image_product(Request $request, $id_product)
+	{
 		$validator = Validator::make($request->all(), [
-				"file" => 'required|mimes:jpg,jpeg,png,gif,svg|max:3048',
+			"file" => 'required|mimes:jpg,jpeg,png,gif,svg|max:3048',
 		]);
 		if ($validator->fails()) {
 			return response(['message' => $validator->getMessageBag()->first()], 401);
@@ -118,54 +119,55 @@ trait ProductManager
 		if ($path) {
 			$image_name = basename($path);
 			$img = Image::make($uploadedFile->getRealPath());
-//			$img->resizeCanvas(640, 480, 'center', true, 'ffffff')
-//					->save($destinationPath.'/640-480-'.$image_name);
-			$img->resize(800, 800, function($contraint) {
+			//			$img->resizeCanvas(640, 480, 'center', true, 'ffffff')
+			//					->save($destinationPath.'/640-480-'.$image_name);
+			$img->resize(800, 800, function ($contraint) {
 				$contraint->aspectRatio();
 			})->resizeCanvas(800, 800, 'center', false, 'ffffff')
-					->save($destinationPath.'/large-'.$image_name);
+				->save($destinationPath . '/large-' . $image_name);
 
-			$img->resize(720, 1280, function($contraint) {
+			$img->resize(720, 1280, function ($contraint) {
 				$contraint->aspectRatio();
 			})->resizeCanvas(720, 1280, 'center', false, 'ffffff')
-					->save($destinationPath.'/single-'.$image_name);
+				->save($destinationPath . '/single-' . $image_name);
 
-			$img->resize(480, 480, function($contraint) {
+			$img->resize(480, 480, function ($contraint) {
 				$contraint->aspectRatio();
 			})->resizeCanvas(480, 480, 'center', false, 'ffffff')
-					->save($destinationPath.'/medium-'.$image_name);
+				->save($destinationPath . '/medium-' . $image_name);
 
-			$img->resize(125, 125, function($contraint) {
+			$img->resize(125, 125, function ($contraint) {
 				$contraint->aspectRatio();
 			})->resizeCanvas(125, 125, 'center', false, 'ffffff')
-					->save($destinationPath.'/cart-'.$image_name);
+				->save($destinationPath . '/cart-' . $image_name);
 
 			$product = ProductModel::query()->find(intval($id_product));
 			if ($product) {
 				$product->update([
-						'image' => $image_name
+					'image' => $image_name
 				]);
 			}
 			return response(["message" => "Fichier envoyer avec succèss"]);
 		} else {
-			return response([ "message" => "Une erreur s'est produite pendant l'envoie du fichier"], 401);
+			return response(["message" => "Une erreur s'est produite pendant l'envoie du fichier"], 401);
 		}
 	}
 
-	public function remove_image_product(Request $request, $id_product) {
+	public function remove_image_product(Request $request, $id_product)
+	{
 		$product = ProductModel::query()->find(intval($id_product));
 		if ($product) {
 			$image = $product->image;
 			if ($image) {
-				$thumbPath ='public/product/thumbnail';
+				$thumbPath = 'public/product/thumbnail';
 				Storage::disk('local')->delete([
-						'public/product/'.$image,
-						$thumbPath.'/medium-'.$image,
-						$thumbPath.'/cart-'.$image,
-						$thumbPath.'/large-'.$image,
+					'public/product/' . $image,
+					$thumbPath . '/medium-' . $image,
+					$thumbPath . '/cart-' . $image,
+					$thumbPath . '/large-' . $image,
 				]);
 				$product->update([
-						'image' => ''
+					'image' => ''
 				]);
 				return response(['success' => true]);
 			}

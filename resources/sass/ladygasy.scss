@@ -151,7 +151,6 @@
   line-height: 1.4;
   text-transform: uppercase;
   letter-spacing: 0.105882352941176vw;
-  color: #000;
   text-decoration: none;
   position: relative;
   background: transparent;
@@ -159,7 +158,8 @@
   padding: 0;
   cursor: pointer;
   padding-bottom: 0.367647058823529vw;
-  border-bottom: 2px solid;
+  background-color: black;
+      color: azure;
 }
 .lg-btn {
   font-size: 13px;

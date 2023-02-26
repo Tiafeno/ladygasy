@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use stdClass;
 
 class Cart extends Model
 {
@@ -56,30 +57,55 @@ class Cart extends Model
 						]);
 					} else {
 						$key = session()->get('lg_cart');
-						$cart_ = static::query()->where('secure_key', '=', $key)->first();
-						if ($cart_) {
-							$cart_->update([
+						$otherCart = static::query()->where('secure_key', '=', $key)->first();
+						if ($otherCart) {
+							$otherCart->update([
 									'id_customer' => $customer->id_customer
 							]);
-							$cart = $cart_;
+							$cart = $otherCart;
 						}
 					}
 				}
-				if (!session()->has('lg_cart'))
+
+				$order = Orders::query()->where('id_cart', '=', $cart->id_cart)->first();
+				if (!$order) {
+					if (!session()->has('lg_cart')) session()->put('lg_cart', $cart->secure_key);
+				} else {
+					$cart = static::create([
+						'secure_key' => $key_secure,
+						'id_guest' => 0,
+						'id_customer' => $customer->id_customer
+					]);
+					DB::table('cart_product')->insert([
+						'id_cart' => $cart->id_cart
+					]);
 					session()->put('lg_cart', $cart->secure_key);
+				}
+				
 				return $cart;
 			}
 		}
 
-		if (session()->has('lg_cart')) {
-			$guest_cart_secure_key = session()->get('lg_cart', null);
-			$guest_cart = static::query()->where('secure_key', '=', $guest_cart_secure_key)->first();
-			if ($guest_cart) return $guest_cart;
-		}
+		// if (session()->has('lg_cart')) {
+		// 	$guest_cart_secure_key = session()->get('lg_cart', null);
+		// 	$guest_cart = static::query()->where('secure_key', '=', $guest_cart_secure_key)->first();
+		// 	if ($guest_cart) return $guest_cart;
+		// }
 		$guest = GuestModel::getContext();
 		// si le client posséde déja une panier
-		$cart = static::query()->where('id_guest', '=', $guest->id_guest)->first();
+		$cart = static::query()->where(['id_guest' => $guest->id_guest, 'active' => 1])->first();
 		if ($cart) {
+			$order = Orders::query()->where('id_cart', '=', $cart->id_cart)->first();
+			if ($order) {
+				$cart = static::create([
+					'secure_key' => $key_secure,
+					'id_guest' => $guest->id_guest,
+					'id_customer' => 0
+				]);
+				DB::table('cart_product')->insert([
+					'id_cart' => $cart->id_cart
+				]);
+			}
 			session()->put('lg_cart', $cart->secure_key);
 			return $cart;
 		}
@@ -97,12 +123,23 @@ class Cart extends Model
 
 	public function getItems()
 	{
-
 		$product_cart = DB::table('cart_product')->where('id_cart', $this->id_cart)->first();
 		if ($product_cart) {
 			$join = DB::table('cart_has_product')->where('id_cart_product', '=', $product_cart->id_cart_product)->get();
-			return $join->map(function ($item) {
+			return $join->map(function (stdClass $item) {
 				$product = ProductModel::query()->where('id_product', '=', $item->id_product)->first();
+				// Verifier que le produit est toujours disponible
+				if (!$product->active) { 
+					// Verifier si la carte est deja dans une commande
+					$order = Orders::query()->where('id_cart', '=', $this->id_cart)->first();
+					if ($order) {
+						// Une commande existe deja, donc on laisse le produit dans le panier
+						// Cree une nouvelle panier
+
+					} else {
+						return false;
+					}
+				}
 				if ($item->id_product_attribute) {
 					$product_attribute = ProductAttribute::query()
 							->where('id_product_attribute', '=', $item->id_product_attribute)
@@ -130,7 +167,7 @@ class Cart extends Model
 						'reference' => $product->reference,
 						'quantity' => $item->quantity
 				];
-			})->toArray();
+			})->filter(fn($k) => $k != false)->toArray();
 		}
 		return [];
 	}
